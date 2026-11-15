@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AURION INSIDER</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #050505; color: #ffffff; overflow-x: hidden; }
+    .font-title { font-family: 'Cinzel', serif; }
+    
+    /* Efek Glassmorphism Gold */
+    .glass-panel { 
+      background: rgba(15, 15, 15, 0.85); 
+      backdrop-filter: blur(15px); 
+      border: 1px solid rgba(212, 175, 55, 0.3); 
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.7); 
+      border-radius: 16px; 
+    }
+    
+    /* Sidebar Aktif */
+    .nav-item { transition: all 0.3s ease; border-left: 3px solid transparent; }
+    .nav-item.active { background: linear-gradient(90deg, rgba(212, 175, 55, 0.15) 0%, transparent 100%); border-left-color: #FCD34D; color: #FCD34D; }
+    .nav-item:hover:not(.active) { background: rgba(255, 255, 255, 0.05); }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #0a0a0a; }
+    ::-webkit-scrollbar-thumb { background: #d97706; border-radius: 10px; }
+
+    .text-gradient-gold { background: linear-gradient(to right, #fcd34d, #d97706); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    
+    /* Input Form */
+    .insider-input { background: rgba(20, 20, 20, 0.8); border: 1px solid rgba(212, 175, 55, 0.3); color: white; transition: all 0.3s; }
+    .insider-input:focus { border-color: #FCD34D; outline: none; box-shadow: 0 0 10px rgba(212, 175, 55, 0.2); }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col md:flex-row relative">
+
+  <!-- ================= SIDEBAR (DESKTOP) & BOTTOM NAV (MOBILE) ================= -->
+  <aside class="w-full md:w-64 bg-[#0a0a0a] border-b md:border-b-0 md:border-r border-[#d97706]/30 flex flex-col md:fixed md:h-screen z-50">
+    
+    <!-- Logo Header -->
+    <div class="p-5 flex items-center gap-3 border-b border-[#d97706]/20">
+      <img src="logo.png" alt="Logo" class="w-10 h-10 object-contain" onerror="this.src='https://raw.githubusercontent.com/saintdwish/saintdwish.github.io/main/logo.png'">
+      <div>
+        <h1 class="font-title text-lg font-bold tracking-widest text-white leading-none">AURION</h1>
+        <p class="text-[9px] text-amber-500 tracking-[0.3em] uppercase">Insider</p>
+      </div>
+    </div>
+
+    <!-- Menu Navigasi -->
+    <nav class="flex-1 flex md:flex-col overflow-x-auto md:overflow-y-auto py-2 md:py-6 gap-1 md:gap-2">
+      <button onclick="switchTab('home')" id="nav-home" class="nav-item active flex items-center gap-3 px-6 py-3 text-sm text-gray-400 font-medium min-w-fit w-full text-left">
+        <i class="fa-solid fa-chart-pie"></i> Dashboard
+      </button>
+      <button onclick="switchTab('users')" id="nav-users" class="nav-item flex items-center gap-3 px-6 py-3 text-sm text-gray-400 font-medium min-w-fit w-full text-left">
+        <i class="fa-solid fa-users"></i> Manajemen User
+      </button>
+      <button onclick="switchTab('broadcast')" id="nav-broadcast" class="nav-item flex items-center gap-3 px-6 py-3 text-sm text-gray-400 font-medium min-w-fit w-full text-left">
+        <i class="fa-solid fa-bullhorn"></i> Broadcast
+      </button>
+      <button onclick="switchTab('settings')" id="nav-settings" class="nav-item flex items-center gap-3 px-6 py-3 text-sm text-gray-400 font-medium min-w-fit w-full text-left">
+        <i class="fa-solid fa-gear"></i> Pengaturan
+      </button>
+    </nav>
+
+    <!-- Tombol Logout -->
+    <div class="p-4 hidden md:block border-t border-[#d97706]/20">
+      <button onclick="logoutAdmin()" class="w-full py-2 rounded-lg border border-red-900/50 text-red-500 hover:bg-red-900/20 transition text-xs font-bold">
+        <i class="fa-solid fa-right-from-bracket mr-2"></i> LOGOUT
+      </button>
+    </div>
+  </aside>
+
+  <!-- ================= MAIN CONTENT ================= -->
+  <main class="flex-1 md:ml-64 p-4 md:p-8 pb-24 md:pb-8 relative min-h-screen">
+    
+    <!-- Background Effect -->
+    <div class="fixed top-0 right-0 w-[500px] h-[500px] bg-amber-500/5 blur-[120px] rounded-full pointer-events-none z-0"></div>
+
+    <!-- TAB 1: HOME (DASHBOARD) -->
+    <div id="tab-home" class="tab-content relative z-10 animate-fade-in block">
+      <div class="mb-8">
+        <h2 class="text-2xl font-bold text-white mb-1">Overview</h2>
+        <p class="text-sm text-gray-400">Selamat datang kembali, Admin.</p>
+      </div>
+
+      <!-- Statistik -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <div class="glass-panel p-6">
+          <div class="flex justify-between items-start mb-4">
+            <div>
+              <p class="text-xs text-gray-400 uppercase tracking-widest font-semibold mb-1">Total User</p>
+              <h3 class="text-3xl font-black text-white">1,245</h3>
+            </div>
+            <div class="w-10 h-10 rounded-xl bg-amber-900/30 flex items-center justify-center text-amber-400">
+              <i class="fa-solid fa-users"></i>
+            </div>
+          </div>
+          <p class="text-[10px] text-green-400 font-medium"><i class="fa-solid fa-arrow-up mr-1"></i> +12 minggu ini</p>
+        </div>
+
+        <div class="glass-panel p-6">
+          <div class="flex justify-between items-start mb-4">
+            <div>
+              <p class="text-xs text-gray-400 uppercase tracking-widest font-semibold mb-1">Total VIP</p>
+              <h3 class="text-3xl font-black text-gradient-gold">324</h3>
+            </div>
+            <div class="w-10 h-10 rounded-xl bg-amber-900/30 flex items-center justify-center text-amber-400">
+              <i class="fa-solid fa-crown"></i>
+            </div>
+          </div>
+          <p class="text-[10px] text-green-400 font-medium"><i class="fa-solid fa-arrow-up mr-1"></i> +5 hari ini</p>
+        </div>
+
+        <div class="glass-panel p-6">
+          <div class="flex justify-between items-start mb-4">
+            <div>
+              <p class="text-xs text-gray-400 uppercase tracking-widest font-semibold mb-1">Pesan Terkirim</p>
+              <h3 class="text-3xl font-black text-white">12</h3>
+            </div>
+            <div class="w-10 h-10 rounded-xl bg-amber-900/30 flex items-center justify-center text-amber-400">
+              <i class="fa-solid fa-paper-plane"></i>
+            </div>
+          </div>
+          <p class="text-[10px] text-gray-400 font-medium">Bulan ini</p>
+        </div>
+      </div>
+
+      <!-- Aktivitas Terbaru -->
+      <div class="glass-panel p-6">
+        <h3 class="text-lg font-bold text-white mb-4 border-b border-amber-500/20 pb-3">Aktivitas Terbaru</h3>
+        <div class="flex flex-col gap-4">
+          <div class="flex items-start gap-4">
+            <div class="w-2 h-2 rounded-full bg-green-500 mt-1.5 shrink-0"></div>
+            <div>
+              <p class="text-sm text-white font-medium">Budi Santoso <span class="text-green-400 font-normal">upgrade ke VIP</span></p>
+              <p class="text-[11px] text-gray-500 mt-0.5">2 menit yang lalu</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="w-2 h-2 rounded-full bg-amber-500 mt-1.5 shrink-0"></div>
+            <div>
+              <p class="text-sm text-white font-medium">User baru mendaftar: <span class="text-amber-400 font-normal">siti_rahma</span></p>
+              <p class="text-[11px] text-gray-500 mt-0.5">15 menit yang lalu</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="w-2 h-2 rounded-full bg-blue-500 mt-1.5 shrink-0"></div>
+            <div>
+              <p class="text-sm text-white font-medium">Pengumuman baru dikirim: <span class="text-blue-400 font-normal">Server Maintenance</span></p>
+              <p class="text-[11px] text-gray-500 mt-0.5">1 jam yang lalu</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: USERS -->
+    <div id="tab-users" class="tab-content relative z-10 hidden">
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+        <div>
+          <h2 class="text-2xl font-bold text-white mb-1">Database User</h2>
+          <p class="text-sm text-gray-400">Kelola akses dan role member.</p>
+        </div>
+        
+        <!-- Search & Filter -->
+        <div class="flex gap-2 w-full md:w-auto">
+          <div class="relative w-full md:w-64">
+            <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm"></i>
+            <input type="text" placeholder="Cari nama atau email..." class="insider-input w-full py-2 pl-9 pr-4 rounded-lg text-sm">
+          </div>
+          <button class="px-4 py-2 bg-amber-900/30 border border-amber-500/50 text-amber-400 rounded-lg text-sm hover:bg-amber-900/50 transition">
+            <i class="fa-solid fa-sort"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- List User (Accordion) -->
+      <div class="flex flex-col gap-3">
+        
+        <!-- User VIP -->
+        <div class="glass-panel overflow-hidden">
+          <div class="p-4 flex justify-between items-center cursor-pointer hover:bg-white/5 transition" onclick="toggleUser(this)">
+            <div class="flex items-center gap-4">
+              <div class="w-10 h-10 rounded-full bg-gradient-to-br from-amber-600 to-amber-900 flex items-center justify-center font-bold text-white">B</div>
+              <div>
+                <p class="text-sm font-bold text-white">Budi Santoso</p>
+                <p class="text-[11px] text-gray-400">budi@email.com</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="px-2 py-1 bg-amber-900/50 border border-amber-500/50 text-amber-400 text-[9px] font-bold rounded uppercase">VIP</span>
+              <i class="fa-solid fa-chevron-down text-gray-500 text-xs transition-transform transform"></i>
+            </div>
+          </div>
+          <div class="hidden p-4 border-t border-white/10 bg-black/40">
+            <div class="grid grid-cols-2 gap-4 mb-4">
+              <div>
+                <p class="text-[10px] text-gray-500 uppercase">Join Date</p>
+                <p class="text-xs text-white">12 Jan 2026</p>
+              </div>
+              <div>
+                <p class="text-[10px] text-gray-500 uppercase">Expired Date</p>
+                <p class="text-xs text-green-400">12 Feb 2026</p>
+              </div>
+            </div>
+            <div class="flex gap-2">
+              <button class="flex-1 py-1.5 bg-amber-600 hover:bg-amber-500 text-white text-[10px] font-bold rounded transition">UBAH ROLE</button>
+              <button class="flex-1 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-[10px] font-bold rounded transition">KIRIM PESAN</button>
+              <button class="flex-1 py-1.5 bg-red-900/50 border border-red-500/50 text-red-400 hover:bg-red-900 text-[10px] font-bold rounded transition">BAN USER</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- User Free -->
+        <div class="glass-panel overflow-hidden">
+          <div class="p-4 flex justify-between items-center cursor-pointer hover:bg-white/5 transition" onclick="toggleUser(this)">
+            <div class="flex items-center gap-4">
+              <div class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center font-bold text-gray-400">S</div>
+              <div>
+                <p class="text-sm font-bold text-white">Siti Rahma</p>
+                <p class="text-[11px] text-gray-400">siti@email.com</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="px-2 py-1 bg-gray-800 border border-gray-600 text-gray-400 text-[9px] font-bold rounded uppercase">FREE</span>
+              <i class="fa-solid fa-chevron-down text-gray-500 text-xs transition-transform transform"></i>
+            </div>
+          </div>
+          <div class="hidden p-4 border-t border-white/10 bg-black/40">
+            <div class="grid grid-cols-2 gap-4 mb-4">
+              <div>
+                <p class="text-[10px] text-gray-500 uppercase">Join Date</p>
+                <p class="text-xs text-white">15 Jan 2026</p>
+              </div>
+              <div>
+                <p class="text-[10px] text-gray-500 uppercase">Expired Date</p>
+                <p class="text-xs text-gray-500">-</p>
+              </div>
+            </div>
+            <div class="flex gap-2">
+              <button class="flex-1 py-1.5 bg-amber-600 hover:bg-amber-500 text-white text-[10px] font-bold rounded transition">UBAH ROLE</button>
+              <button class="flex-1 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-[10px] font-bold rounded transition">KIRIM PESAN</button>
+              <button class="flex-1 py-1.5 bg-red-900/50 border border-red-500/50 text-red-400 hover:bg-red-900 text-[10px] font-bold rounded transition">BAN USER</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- TAB 3: BROADCAST -->
+    <div id="tab-broadcast" class="tab-content relative z-10 hidden max-w-3xl">
+      <div class="mb-8">
+        <h2 class="text-2xl font-bold text-white mb-1">Kirim Pengumuman</h2>
+        <p class="text-sm text-gray-400">Pesan ini akan muncul di lonceng Web Utama (AURION).</p>
+      </div>
+
+      <div class="glass-panel p-6">
+        <form id="broadcastForm" onsubmit="sendBroadcast(event)">
+          
+          <div class="mb-5">
+            <label class="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Target Penerima</label>
+            <select class="insider-input w-full p-3 rounded-lg text-sm appearance-none cursor-pointer">
+              <option value="all">Semua User (Free & VIP)</option>
+              <option value="vip">Khusus VIP & VVIP</option>
+            </select>
+          </div>
+
+          <div class="mb-5">
+            <label class="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Judul Pengumuman</label>
+            <input type="text" id="bcTitle" class="insider-input w-full p-3 rounded-lg text-sm" placeholder="Contoh: SERVER MAINTENANCE" required>
+          </div>
+
+          <div class="mb-6">
+            <label class="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Isi Pesan</label>
+            <textarea id="bcMessage" rows="6" class="insider-input w-full p-3 rounded-lg text-sm" placeholder="Tulis isi pengumuman lengkap di sini..." required></textarea>
+          </div>
+
+          <div class="flex justify-end gap-3">
+            <button type="reset" class="px-6 py-2.5 rounded-lg border border-gray-600 text-gray-400 font-semibold text-sm hover:bg-white/5 transition">Reset</button>
+            <button type="submit" id="btnSend" class="px-6 py-2.5 rounded-lg bg-gradient-to-r from-amber-700 to-amber-500 text-white font-bold text-sm shadow-[0_0_15px_rgba(212,175,55,0.3)] hover:scale-105 transition">
+              <i class="fa-solid fa-paper-plane mr-2"></i> Kirim Sekarang
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- TAB 4: SETTINGS -->
+    <div id="tab-settings" class="tab-content relative z-10 hidden max-w-xl">
+      <div class="mb-8">
+        <h2 class="text-2xl font-bold text-white mb-1">Pengaturan Akun</h2>
+        <p class="text-sm text-gray-400">Ubah kredensial login admin Anda.</p>
+      </div>
+
+      <div class="glass-panel p-6">
+        <div class="flex items-center gap-4 mb-6 pb-6 border-b border-amber-500/20">
+          <div class="w-16 h-16 rounded-full bg-amber-900/50 border border-amber-500 flex items-center justify-center text-2xl text-amber-400">
+            <i class="fa-solid fa-user-shield"></i>
+          </div>
+          <div>
+            <h3 class="text-lg font-bold text-white">Super Admin</h3>
+            <p class="text-xs text-amber-400">admin@aurion.com</p>
+          </div>
+        </div>
+
+        <form onsubmit="event.preventDefault(); alert('Fitur ubah password akan segera aktif.');">
+          <div class="mb-4">
+            <label class="block text-xs font-bold text-gray-400 mb-2">Password Lama</label>
+            <input type="password" class="insider-input w-full p-3 rounded-lg text-sm" placeholder="••••••••" required>
+          </div>
+          <div class="mb-6">
+            <label class="block text-xs font-bold text-gray-400 mb-2">Password Baru</label>
+            <input type="password" class="insider-input w-full p-3 rounded-lg text-sm" placeholder="••••••••" required>
+          </div>
+          <button type="submit" class="w-full py-3 rounded-lg bg-amber-600 text-white font-bold text-sm hover:bg-amber-500 transition">Simpan Perubahan</button>
+        </form>
+      </div>
+
+      <!-- Tombol Logout Mobile -->
+      <button onclick="logoutAdmin()" class="w-full mt-6 py-3 rounded-xl border border-red-900/50 text-red-500 hover:bg-red-900/20 transition text-sm font-bold md:hidden">
+        <i class="fa-solid fa-right-from-bracket mr-2"></i> LOGOUT
+      </button>
+    </div>
+
+  </main>
+
+  <!-- ================= JAVASCRIPT ================= -->
+  <script>
+    // --- LOGIKA NAVIGASI TAB ---
+    function switchTab(tabId) {
+      // Sembunyikan semua konten
+      document.querySelectorAll('.tab-content').forEach(el => {
+        el.classList.add('hidden');
+        el.classList.remove('block');
+      });
+      // Matikan semua status aktif di menu
+      document.querySelectorAll('.nav-item').forEach(el => {
+        el.classList.remove('active');
+        el.classList.add('text-gray-400');
+      });
+
+      // Tampilkan yang dipilih
+      document.getElementById('tab-' + tabId).classList.remove('hidden');
+      document.getElementById('tab-' + tabId).classList.add('block');
+      
+      // Nyalakan menu yang aktif
+      const activeNav = document.getElementById('nav-' + tabId);
+      activeNav.classList.add('active');
+      activeNav.classList.remove('text-gray-400');
+    }
+
+    // --- LOGIKA ACCORDION USER ---
+    function toggleUser(headerElement) {
+      const detail = headerElement.nextElementSibling;
+      const icon = headerElement.querySelector('.fa-chevron-down');
+      
+      if (detail.classList.contains('hidden')) {
+        detail.classList.remove('hidden');
+        icon.style.transform = 'rotate(180deg)';
+      } else {
+        detail.classList.add('hidden');
+        icon.style.transform = 'rotate(0deg)';
+      }
+    }
+
+    // --- LOGIKA KIRIM BROADCAST ---
+    function sendBroadcast(e) {
+      e.preventDefault();
+      const btn = document.getElementById('btnSend');
+      const originalText = btn.innerHTML;
+      
+      const title = document.getElementById('bcTitle').value;
+      const msg = document.getElementById('bcMessage').value;
+
+      // Loading state
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Mengirim...';
+      btn.disabled = true;
+
+      // Simulasi pengiriman ke API (Nanti diganti dengan fetch ke GAS/VPS)
+      setTimeout(() => {
+        alert(`✅ Pengumuman Berhasil Dikirim!\n\nJudul: ${title}\nPesan: ${msg}`);
+        
+        // Reset form & tombol
+        document.getElementById('broadcastForm').reset();
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+        
+        // Pindah ke Home setelah kirim
+        switchTab('home');
+      }, 1500);
+    }
+
+    // --- LOGOUT ---
+    function logoutAdmin() {
+      if(confirm("Yakin ingin keluar dari AURION INSIDER?")) {
+        window.location.href = "login.html"; // Arahkan ke halaman login admin
+      }
+    }
+
+    // --- ANIMASI SIMPLE ---
+    const style = document.createElement('style');
+    style.innerHTML = `
+      @keyframes fade-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+      .animate-fade-in { animation: fade-in 0.4s ease-out forwards; }
+    `;
+    document.head.appendChild(style);
+  </script>
+</body>
+</html>
