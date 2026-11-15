@@ -334,24 +334,25 @@
 
   <!-- ================= JAVASCRIPT ================= -->
   <script>
+    // Proteksi Halaman: Jika belum login, tendang ke index.html
+    if (!localStorage.getItem('insider_token')) {
+        window.location.href = "index.html";
+    }
+
     // --- LOGIKA NAVIGASI TAB ---
     function switchTab(tabId) {
-      // Sembunyikan semua konten
       document.querySelectorAll('.tab-content').forEach(el => {
         el.classList.add('hidden');
         el.classList.remove('block');
       });
-      // Matikan semua status aktif di menu
       document.querySelectorAll('.nav-item').forEach(el => {
         el.classList.remove('active');
         el.classList.add('text-gray-400');
       });
 
-      // Tampilkan yang dipilih
       document.getElementById('tab-' + tabId).classList.remove('hidden');
       document.getElementById('tab-' + tabId).classList.add('block');
       
-      // Nyalakan menu yang aktif
       const activeNav = document.getElementById('nav-' + tabId);
       activeNav.classList.add('active');
       activeNav.classList.remove('text-gray-400');
@@ -380,20 +381,17 @@
       const title = document.getElementById('bcTitle').value;
       const msg = document.getElementById('bcMessage').value;
 
-      // Loading state
       btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Mengirim...';
       btn.disabled = true;
 
-      // Simulasi pengiriman ke API (Nanti diganti dengan fetch ke GAS/VPS)
+      // Simulasi pengiriman
       setTimeout(() => {
         alert(`✅ Pengumuman Berhasil Dikirim!\n\nJudul: ${title}\nPesan: ${msg}`);
         
-        // Reset form & tombol
         document.getElementById('broadcastForm').reset();
         btn.innerHTML = originalText;
         btn.disabled = false;
         
-        // Pindah ke Home setelah kirim
         switchTab('home');
       }, 1500);
     }
@@ -401,11 +399,12 @@
     // --- LOGOUT ---
     function logoutAdmin() {
       if(confirm("Yakin ingin keluar dari AURION INSIDER?")) {
-        window.location.href = "login.html"; // Arahkan ke halaman login admin
+        localStorage.removeItem('insider_token');
+        window.location.href = "index.html";
       }
     }
 
-    // --- ANIMASI SIMPLE ---
+    // --- ANIMASI ---
     const style = document.createElement('style');
     style.innerHTML = `
       @keyframes fade-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
