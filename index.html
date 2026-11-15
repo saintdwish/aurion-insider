@@ -51,7 +51,6 @@
   </div>
 
   <script>
-    // URL SUDAH DIMASUKKAN
     const API_URL = "https://script.google.com/macros/s/AKfycbzeKcKJPtH5R-8VoPEkwlh8kLZ2Y5eTAOGssmm5uKGJTWAWT6j72lWc7ExL_D9ToKYG/exec"; 
 
     function togglePass(icon) {
@@ -76,8 +75,9 @@
       try {
         const response = await fetch(API_URL, {
           method: 'POST',
+          // INI TRIK ANTI-BLOKIR CORS
           headers: {
-            'Content-Type': 'text/plain;charset=utf-8', // INI KUNCI UTAMANYA
+            'Content-Type': 'text/plain;charset=utf-8' 
           },
           body: JSON.stringify({
             action: 'insider_login',
@@ -85,22 +85,25 @@
             password: pass
           })
         });
+        
+        const data = await response.json();
 
         if (data.status === 'success') {
           localStorage.setItem('insider_token', 'aurion_super_secret_token');
           localStorage.setItem('insider_username', data.user.username);
           window.location.href = "dashboard.html";
         } else {
-          errText.innerText = data.message; // Menampilkan pesan error dari Google Sheets
+          errText.innerText = data.message;
           err.classList.remove('hidden');
           btn.innerHTML = originalText;
           btn.disabled = false;
         }
       } catch (error) {
-        errText.innerText = "Gagal terhubung ke server. (Cek URL atau Deploy GAS)";
+        errText.innerText = "Gagal Koneksi. Cek Console (F12).";
         err.classList.remove('hidden');
         btn.innerHTML = originalText;
         btn.disabled = false;
+        console.error(error);
       }
     }
   </script>
