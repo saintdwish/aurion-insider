@@ -2,16 +2,16 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>AURION INSIDER - Login</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    body { font-family: 'Inter', sans-serif; background-color: #050505; color: #ffffff; height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    body { font-family: 'Inter', sans-serif; background-color: #020c1b; color: #ffffff; height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; background-image: url('bg.png'); background-size: cover; background-position: center; }
     .bg-glow { position: fixed; width: 600px; height: 600px; background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%); top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 0; pointer-events: none; }
-    .glass-panel { background: rgba(15, 15, 15, 0.85); backdrop-filter: blur(20px); border: 1px solid rgba(212, 175, 55, 0.3); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8); border-radius: 20px; position: relative; z-index: 10; }
-    .insider-input { background: rgba(20, 20, 20, 0.9); border: 1px solid rgba(212, 175, 55, 0.3); color: white; transition: all 0.3s; }
+    .glass-panel { background: rgba(10, 18, 38, 0.85); backdrop-filter: blur(20px); border: 1px solid rgba(212, 175, 55, 0.3); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8); border-radius: 20px; position: relative; z-index: 10; }
+    .insider-input { background: rgba(15, 25, 50, 0.9); border: 1px solid rgba(212, 175, 55, 0.3); color: white; transition: all 0.3s; }
     .insider-input:focus { border-color: #FCD34D; outline: none; box-shadow: 0 0 15px rgba(212, 175, 55, 0.2); }
   </style>
 </head>
@@ -51,8 +51,7 @@
   </div>
 
   <script>
-    // GANTI DENGAN URL BARU DARI DEPLOY GAS KAMU!
-    const API_URL = "URL_BARU_DARI_GAS_KAMU"; 
+    const API_URL = "https://script.google.com/macros/s/AKfycbzeKcKJPtH5R-8VoPEkwlh8kLZ2Y5eTAOGssmm5uKGJTWAWT6j72lWc7ExL_D9ToKYG/exec"; 
 
     function togglePass(icon) {
       const input = document.getElementById('adminPass');
@@ -74,16 +73,13 @@
       err.classList.add('hidden');
 
       try {
-        // INI TRIK ANTI BLOKIR CORS (Jangan diubah)
+        // TRIK URLSearchParams 100% TEMBUS DI HP
         const response = await fetch(API_URL, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'text/plain;charset=utf-8' 
-          },
-          body: JSON.stringify({
-            action: 'insider_login',
-            username: user,
-            password: pass
+          body: new URLSearchParams({
+            'action': 'insider_login',
+            'username': user,
+            'password': pass
           })
         });
         
@@ -104,7 +100,6 @@
         err.classList.remove('hidden');
         btn.innerHTML = originalText;
         btn.disabled = false;
-        console.error(error);
       }
     }
   </script>
