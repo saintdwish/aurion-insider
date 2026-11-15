@@ -51,6 +51,7 @@
   </div>
 
   <script>
+    // URL API KAMU
     const API_URL = "https://script.google.com/macros/s/AKfycbzeKcKJPtH5R-8VoPEkwlh8kLZ2Y5eTAOGssmm5uKGJTWAWT6j72lWc7ExL_D9ToKYG/exec"; 
 
     function togglePass(icon) {
@@ -75,7 +76,7 @@
       try {
         const response = await fetch(API_URL, {
           method: 'POST',
-          // INI TRIK ANTI-BLOKIR CORS
+          // TRIK ANTI BLOKIR BROWSER
           headers: {
             'Content-Type': 'text/plain;charset=utf-8' 
           },
@@ -93,13 +94,13 @@
           localStorage.setItem('insider_username', data.user.username);
           window.location.href = "dashboard.html";
         } else {
-          errText.innerText = data.message;
+          errText.innerText = data.message; // Nampilin pesan error (misal pass salah)
           err.classList.remove('hidden');
           btn.innerHTML = originalText;
           btn.disabled = false;
         }
       } catch (error) {
-        errText.innerText = "Gagal Koneksi. Cek Console (F12).";
+        errText.innerText = "Gagal Koneksi. Pastikan Deploy GAS sudah New Version.";
         err.classList.remove('hidden');
         btn.innerHTML = originalText;
         btn.disabled = false;
