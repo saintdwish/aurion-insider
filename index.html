@@ -76,10 +76,10 @@
     <form id="loginForm" onsubmit="handleLogin(event)">
       
       <div class="mb-4 text-left">
-        <label class="block text-[10px] font-bold text-gray-400 mb-2 uppercase tracking-wider ml-1">Admin ID</label>
+        <label class="block text-[10px] font-bold text-gray-400 mb-2 uppercase tracking-wider ml-1">Username</label>
         <div class="relative">
           <i class="fa-regular fa-user absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
-          <input type="text" id="adminId" class="insider-input w-full py-3 pl-11 pr-4 rounded-xl text-sm" placeholder="Masukkan Email / ID" required>
+          <input type="text" id="adminId" class="insider-input w-full py-3 pl-11 pr-4 rounded-xl text-sm" placeholder="Masukkan Username" required>
         </div>
       </div>
 
@@ -92,7 +92,7 @@
         </div>
       </div>
 
-      <p id="errorMsg" class="text-red-500 text-xs text-left ml-1 mb-4 hidden font-medium"><i class="fa-solid fa-circle-exclamation mr-1"></i> Kredensial tidak valid!</p>
+      <p id="errorMsg" class="text-red-500 text-xs text-left ml-1 mb-4 hidden font-medium"><i class="fa-solid fa-circle-exclamation mr-1"></i> <span id="errText">Kredensial tidak valid!</span></p>
 
       <button type="submit" id="btnLogin" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-amber-700 to-amber-500 text-white font-bold text-sm shadow-[0_0_20px_rgba(212,175,55,0.4)] hover:scale-[1.02] transition flex items-center justify-center gap-2">
         <span>AUTHORIZE ACCESS</span> <i class="fa-solid fa-arrow-right-to-bracket"></i>
@@ -103,6 +103,9 @@
   </div>
 
   <script>
+    // URL WEB APP GAS KAMU SUDAH DIMASUKKAN DI SINI
+    const API_URL = "https://script.google.com/macros/s/AKfycbzeKcKJPtH5R-8VoPEkwlh8kLZ2Y5eTAOGssmm5uKGJTWAWT6j72lWc7ExL_D9ToKYG/exec"; 
+
     function togglePass(icon) {
       const input = document.getElementById('adminPass');
       if (input.type === "password") {
@@ -114,30 +117,48 @@
       }
     }
 
-    function handleLogin(e) {
+    async function handleLogin(e) {
       e.preventDefault();
       const btn = document.getElementById('btnLogin');
       const originalText = btn.innerHTML;
       const user = document.getElementById('adminId').value;
       const pass = document.getElementById('adminPass').value;
       const err = document.getElementById('errorMsg');
+      const errText = document.getElementById('errText');
 
       btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Memverifikasi...';
       btn.disabled = true;
       err.classList.add('hidden');
 
-      // SIMULASI LOGIN (Nanti kita ganti dengan API Google Sheets)
-      setTimeout(() => {
-        if (user === "admin" && pass === "admin123") {
-          // Simpan token
+      try {
+        // Tembak API Google Apps Script
+        const response = await fetch(API_URL, {
+          method: 'POST',
+          body: JSON.stringify({
+            action: 'insider_login',
+            username: user,
+            password: pass
+          })
+        });
+
+        const data = await response.json();
+
+        if (data.status === 'success') {
           localStorage.setItem('insider_token', 'aurion_super_secret_token');
+          localStorage.setItem('insider_username', data.user.username);
           window.location.href = "dashboard.html";
         } else {
+          errText.innerText = data.message;
           err.classList.remove('hidden');
           btn.innerHTML = originalText;
           btn.disabled = false;
         }
-      }, 1200);
+      } catch (error) {
+        errText.innerText = "Gagal terhubung ke server. Cek URL API.";
+        err.classList.remove('hidden');
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+      }
     }
   </script>
 </body>
