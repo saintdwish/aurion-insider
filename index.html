@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AURION INSIDER - Login</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Cinzel:wght@700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <style>
+    body { 
+      font-family: 'Inter', sans-serif; 
+      background-color: #050505; 
+      color: #ffffff; 
+      height: 100vh; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* Background Effect */
+    .bg-glow {
+      position: fixed;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .glass-panel { 
+      background: rgba(15, 15, 15, 0.85); 
+      backdrop-filter: blur(20px); 
+      border: 1px solid rgba(212, 175, 55, 0.3); 
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8); 
+      border-radius: 20px; 
+      position: relative;
+      z-index: 10;
+    }
+    
+    .insider-input { 
+      background: rgba(20, 20, 20, 0.9); 
+      border: 1px solid rgba(212, 175, 55, 0.3); 
+      color: white; 
+      transition: all 0.3s; 
+    }
+    .insider-input:focus { 
+      border-color: #FCD34D; 
+      outline: none; 
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.2); 
+    }
+  </style>
+</head>
+<body class="relative">
+
+  <div class="bg-glow"></div>
+
+  <div class="glass-panel w-[90%] max-w-sm p-8 text-center">
+    
+    <!-- Logo -->
+    <div class="mb-8 flex flex-col items-center">
+      <div class="w-16 h-16 rounded-full bg-amber-900/30 border border-amber-500/50 flex items-center justify-center mb-4 shadow-[0_0_20px_rgba(212,175,55,0.2)]">
+        <i class="fa-solid fa-user-shield text-2xl text-amber-400"></i>
+      </div>
+      <h1 class="font-title text-2xl font-bold tracking-widest text-white">AURION</h1>
+      <p class="text-[10px] text-amber-500 tracking-[0.4em] uppercase mt-1">Insider Area</p>
+    </div>
+
+    <!-- Form Login -->
+    <form id="loginForm" onsubmit="handleLogin(event)">
+      
+      <div class="mb-4 text-left">
+        <label class="block text-[10px] font-bold text-gray-400 mb-2 uppercase tracking-wider ml-1">Admin ID</label>
+        <div class="relative">
+          <i class="fa-regular fa-user absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
+          <input type="text" id="adminId" class="insider-input w-full py-3 pl-11 pr-4 rounded-xl text-sm" placeholder="Masukkan Email / ID" required>
+        </div>
+      </div>
+
+      <div class="mb-6 text-left">
+        <label class="block text-[10px] font-bold text-gray-400 mb-2 uppercase tracking-wider ml-1">Passkey</label>
+        <div class="relative">
+          <i class="fa-solid fa-lock absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
+          <input type="password" id="adminPass" class="insider-input w-full py-3 pl-11 pr-11 rounded-xl text-sm" placeholder="••••••••" required>
+          <i class="fa-regular fa-eye absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 cursor-pointer hover:text-white transition" onclick="togglePass(this)"></i>
+        </div>
+      </div>
+
+      <p id="errorMsg" class="text-red-500 text-xs text-left ml-1 mb-4 hidden font-medium"><i class="fa-solid fa-circle-exclamation mr-1"></i> Kredensial tidak valid!</p>
+
+      <button type="submit" id="btnLogin" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-amber-700 to-amber-500 text-white font-bold text-sm shadow-[0_0_20px_rgba(212,175,55,0.4)] hover:scale-[1.02] transition flex items-center justify-center gap-2">
+        <span>AUTHORIZE ACCESS</span> <i class="fa-solid fa-arrow-right-to-bracket"></i>
+      </button>
+    </form>
+
+    <p class="text-[9px] text-gray-600 mt-8 uppercase tracking-widest">Restricted System &copy; 2026</p>
+  </div>
+
+  <script>
+    function togglePass(icon) {
+      const input = document.getElementById('adminPass');
+      if (input.type === "password") {
+        input.type = "text";
+        icon.classList.replace('fa-eye', 'fa-eye-slash');
+      } else {
+        input.type = "password";
+        icon.classList.replace('fa-eye-slash', 'fa-eye');
+      }
+    }
+
+    function handleLogin(e) {
+      e.preventDefault();
+      const btn = document.getElementById('btnLogin');
+      const originalText = btn.innerHTML;
+      const user = document.getElementById('adminId').value;
+      const pass = document.getElementById('adminPass').value;
+      const err = document.getElementById('errorMsg');
+
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Memverifikasi...';
+      btn.disabled = true;
+      err.classList.add('hidden');
+
+      // SIMULASI LOGIN (Nanti kita ganti dengan API Google Sheets)
+      setTimeout(() => {
+        if (user === "admin" && pass === "admin123") {
+          // Simpan token palsu
+          localStorage.setItem('insider_token', 'aurion_super_secret_token');
+          window.location.href = "dashboard.html";
+        } else {
+          err.classList.remove('hidden');
+          btn.innerHTML = originalText;
+          btn.disabled = false;
+        }
+      }, 1200);
+    }
+  </script>
+</body>
+</html>
