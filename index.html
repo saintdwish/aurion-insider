@@ -51,7 +51,7 @@
   </div>
 
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbzeKcKJPtH5R-8VoPEkwlh8kLZ2Y5eTAOGssmm5uKGJTWAWT6j72lWc7ExL_D9ToKYG/exec"; 
+    const API_URL = "https://enviable-umbilical-erupt.ngrok-free.dev"; 
 
     function togglePass(icon) {
       const input = document.getElementById('adminPass');
@@ -73,20 +73,20 @@
       err.classList.add('hidden');
 
       try {
-        // TRIK URLSearchParams 100% TEMBUS DI HP
-        const response = await fetch(API_URL, {
+        const response = await fetch(API_URL + '/api/login', {
           method: 'POST',
-          body: new URLSearchParams({
-            'action': 'insider_login',
-            'username': user,
-            'password': pass
-          })
+          headers: { 'Content-Type': 'application/json', 'ngrok-skip-browser-warning': 'true' },
+          body: JSON.stringify({ email: user, password: pass })
         });
-        
         const data = await response.json();
 
+        if (data.status === 'success' && data.user.role !== 'ADMIN') {
+          data.status = 'error';
+          data.message = 'Akses ditolak. Khusus ADMIN.';
+        }
+
         if (data.status === 'success') {
-          localStorage.setItem('insider_token', 'aurion_super_secret_token');
+          localStorage.setItem('insider_token', data.token);
           localStorage.setItem('insider_username', data.user.username);
           window.location.href = "dashboard.html";
         } else {
@@ -96,7 +96,7 @@
           btn.disabled = false;
         }
       } catch (error) {
-        errText.innerText = "Gagal Koneksi. Pastikan Deploy GAS Aksesnya 'Anyone'.";
+        errText.innerText = "Gagal koneksi ke server. Pastikan VPS dan ngrok menyala.";
         err.classList.remove('hidden');
         btn.innerHTML = originalText;
         btn.disabled = false;
