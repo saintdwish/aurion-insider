@@ -205,8 +205,26 @@
   </nav>
 
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbzeKcKJPtH5R-8VoPEkwlh8kLZ2Y5eTAOGssmm5uKGJTWAWT6j72lWc7ExL_D9ToKYG/exec";
+    const API_URL = "https://enviable-umbilical-erupt.ngrok-free.dev";
     let globalUsers = []; 
+    function esc(v) { return String(v == null ? '' : v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+    async function api(path, method, body) {
+      try {
+        const res = await fetch(API_URL + path, {
+          method: method || 'GET',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('insider_token'), 'ngrok-skip-browser-warning': 'true' },
+          body: body ? JSON.stringify(body) : undefined
+        });
+        if (res.status === 401 || res.status === 403) {
+          localStorage.removeItem('insider_token'); localStorage.removeItem('insider_username');
+          window.location.href = 'index.html';
+          return { status: 'error', message: 'Sesi habis, silakan login ulang.' };
+        }
+        return await res.json();
+      } catch (e) { return { status: 'error', message: 'Gagal terhubung ke server.' }; }
+    }
+
 
     if (!localStorage.getItem('insider_token')) { window.location.href = "index.html"; }
 
@@ -227,11 +245,7 @@
 
     async function loadUsersFromDB() {
         try {
-            const response = await fetch(API_URL, {
-                method: 'POST',
-                body: new URLSearchParams({ 'action': 'get_users' })
-            });
-            const data = await response.json();
+            const data = await api('/api/admin/users', 'GET');
             
             if(data.status === 'success') {
                 globalUsers = data.data;
@@ -258,28 +272,28 @@
             let initial = u.username ? u.username.charAt(0).toUpperCase() : "U";
 
             html += `
-            <div class="navy-card overflow-hidden user-item" data-username="${u.username.toLowerCase()}">
+            <div class="navy-card overflow-hidden user-item" data-username="${esc(u.username).toLowerCase()}">
               <div class="p-4 flex justify-between items-center cursor-pointer hover:bg-white/5 transition" onclick="toggleUser(this)">
                 <div class="flex items-center gap-3">
-                  <div class="w-10 h-10 rounded-full bg-[#112240] border border-gray-700 flex items-center justify-center font-bold text-white">${initial}</div>
+                  <div class="w-10 h-10 rounded-full bg-[#112240] border border-gray-700 flex items-center justify-center font-bold text-white">${esc(initial)}</div>
                   <div>
-                    <p class="text-sm font-bold text-white">${u.username}</p>
-                    <p class="text-[10px] text-gray-400">${u.email || '-'}</p>
+                    <p class="text-sm font-bold text-white">${esc(u.username)}</p>
+                    <p class="text-[10px] text-gray-400">${esc(u.email || '-')}</p>
                   </div>
                 </div>
                 <div class="flex items-center gap-2">
-                  <span class="px-2 py-1 ${roleColor} text-[9px] font-bold rounded uppercase">${u.role}</span>
+                  <span class="px-2 py-1 ${roleColor} text-[9px] font-bold rounded uppercase">${esc(u.role)}</span>
                   <i class="fa-solid fa-chevron-down text-gray-500 text-xs transition-transform transform"></i>
                 </div>
               </div>
               <div class="hidden p-4 border-t border-gray-700 bg-[#020c1b]">
                 <div class="grid grid-cols-2 gap-3 mb-4">
-                  <div><p class="text-[9px] text-gray-500 uppercase">Masa Aktif</p><p class="text-xs text-white">${u.validUntil || '-'}</p></div>
-                  <div><p class="text-[9px] text-gray-500 uppercase">Status</p><p class="text-xs ${u.status === 'ACTIVE' ? 'text-green-400' : 'text-red-400'}">${u.status}</p></div>
+                  <div><p class="text-[9px] text-gray-500 uppercase">Masa Aktif</p><p class="text-xs text-white">${esc(u.validUntil || '-')}</p></div>
+                  <div><p class="text-[9px] text-gray-500 uppercase">Status</p><p class="text-xs ${u.status === 'ACTIVE' ? 'text-green-400' : 'text-red-400'}">${esc(u.status)}</p></div>
                 </div>
                 <div class="flex gap-2">
-                  <button class="flex-1 py-1.5 bg-gray-700 text-white text-[10px] font-bold rounded" onclick="alert('Segera')">UBAH ROLE</button>
-                  <button class="flex-1 py-1.5 bg-red-900/50 border border-red-500/50 text-red-400 text-[10px] font-bold rounded" onclick="alert('Segera')">BAN</button>
+                  <button class="flex-1 py-1.5 bg-gray-700 text-white text-[10px] font-bold rounded" data-email="${esc(u.email)}" onclick="changeRole(this.dataset.email)">UBAH ROLE</button>
+                  <button class="flex-1 py-1.5 bg-red-900/50 border border-red-500/50 text-red-400 text-[10px] font-bold rounded" data-email="${esc(u.email)}" data-status="${esc(u.status)}" onclick="toggleBan(this.dataset.email, this.dataset.status)">${u.status === 'BANNED' ? 'UNBAN' : 'BAN'}</button>
                 </div>
               </div>
             </div>
@@ -327,16 +341,7 @@
       btn.disabled = true;
 
       try {
-        const response = await fetch(API_URL, {
-            method: 'POST',
-            body: new URLSearchParams({
-                'action': 'send_broadcast',
-                'target': target,
-                'title': title,
-                'message': msg
-            })
-        });
-        const data = await response.json();
+        const data = await api('/api/admin/broadcast', 'POST', { target: target, title: title, message: msg });
 
         if(data.status === 'success') {
             alert(`✅ Pengumuman Berhasil Dikirim!`);
@@ -345,6 +350,28 @@
         } else { alert("Gagal: " + data.message); }
       } catch(error) { alert("Gagal terhubung ke server."); } 
       finally { btn.innerHTML = originalText; btn.disabled = false; }
+    }
+
+    async function changeRole(email) {
+      const role = (prompt('Role baru untuk ' + email + '\nKetik: NO ROLE / VIP / VVIP / ADMIN') || '').trim().toUpperCase();
+      if (!role) return;
+      let duration = '';
+      if (role === 'VIP') {
+        duration = (prompt('Durasi VIP: 1_month / 1_year / lifetime', '1_month') || '').trim();
+        if (!duration) return;
+      }
+      if (!confirm('Ubah role ' + email + ' menjadi ' + role + '?')) return;
+      const data = await api('/api/admin/update_role', 'POST', { targetEmail: email, newRole: role, duration: duration });
+      alert(data.status === 'success' ? '✅ ' + data.message : 'Gagal: ' + data.message);
+      if (data.status === 'success') { globalUsers = []; loadUsersFromDB(); }
+    }
+
+    async function toggleBan(email, status) {
+      const newStatus = status === 'BANNED' ? 'ACTIVE' : 'BANNED';
+      if (!confirm((newStatus === 'BANNED' ? 'BAN ' : 'UNBAN ') + email + '?')) return;
+      const data = await api('/api/admin/ban_user', 'POST', { targetEmail: email, newStatus: newStatus });
+      alert(data.status === 'success' ? '✅ ' + data.message : 'Gagal: ' + data.message);
+      if (data.status === 'success') { globalUsers = []; loadUsersFromDB(); }
     }
 
     function logoutAdmin() {
