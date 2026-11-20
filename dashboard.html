@@ -7,6 +7,8 @@
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#020c1b">
   <link rel="apple-touch-icon" href="icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Insider">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <script src="https://cdn.tailwindcss.com"></script>
@@ -27,7 +29,17 @@
     #tab-analisa .an-tabs{display:flex;gap:12px;margin-bottom:14px}
     #tab-analisa .an-tabs button{flex:1;font-weight:700;font-size:13px;padding:9px;border:1px solid var(--line);border-radius:99px;color:#fff;background:transparent}
     #tab-analisa .an-tabs button.on{background:#2a8fd4;border-color:#2a8fd4}
-    #tab-analisa .an-paste{position:relative;margin-top:22px}
+    #tab-analisa .act{border:1.5px solid var(--gold);background:rgba(252,211,77,.07);border-radius:20px;padding:12px 14px;margin-bottom:14px;font-size:12px}
+    #tab-analisa .act .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+    #tab-analisa .act .side{font-weight:800;font-size:15px}
+    #tab-analisa .act .chip{font-size:10px;font-weight:800;border:1px solid var(--gold);color:var(--gold);border-radius:99px;padding:3px 10px}
+    #tab-analisa .act .row{color:var(--mut);line-height:1.6}
+    #tab-analisa .act .row b{color:#fff}
+    #tab-analisa .act button{margin-top:8px;width:100%;border:1px solid var(--line);border-radius:99px;padding:7px;font-size:11px;font-weight:700;color:#fff;background:transparent}
+    #tab-analisa .an-sess{display:flex;gap:8px;margin-top:6px}
+    #tab-analisa .an-sess button{flex:1;font-size:11px;font-weight:700;padding:7px 4px;border:1px solid var(--line);border-radius:99px;color:#fff;background:transparent}
+    #tab-analisa .an-sess button.on{background:rgba(252,211,77,.16);border-color:var(--gold);color:var(--gold)}
+    #tab-analisa .an-paste{position:relative;margin-top:26px}
     #tab-analisa .an-chip{position:absolute;top:-16px;left:6px;display:flex;align-items:center;gap:8px;background:#020c1b;border:1px solid var(--line);border-radius:99px;padding:8px 16px;font-size:12px;font-weight:700;z-index:2}
     #tab-analisa .an-chip i{color:#3b9be0}
     #tab-analisa textarea{width:100%;height:230px;background:transparent;border:1px solid var(--line);border-radius:30px;padding:26px 16px 14px;color:#fff;font-size:13px;resize:none;outline:none}
@@ -36,7 +48,9 @@
     #tab-analisa .an-gex label{display:block;font-size:10px;font-weight:600;margin:0 0 3px 6px}
     #tab-analisa .an-gex .put{color:var(--red)}#tab-analisa .an-gex .call{color:var(--grn)}#tab-analisa .an-gex .zero{color:var(--yel)}
     #tab-analisa .an-gex input{width:100%;background:transparent;border:1px solid var(--line);border-radius:99px;padding:6px 12px;color:#fff;font-size:13px;margin-bottom:10px;outline:none}
-    #tab-analisa .an-go{display:block;width:78%;margin:22px auto 0;padding:13px;border-radius:99px;background:var(--btn);color:#fff;font-weight:800;font-size:12px;letter-spacing:.04em}
+    #tab-analisa .an-last{width:100%;font-size:11px;font-weight:700;padding:7px;border:1px solid var(--line);border-radius:99px;color:var(--gold);background:transparent}
+    #tab-analisa .an-note{text-align:center;font-size:10px;color:var(--mut);margin-top:6px;min-height:14px}
+    #tab-analisa .an-go{display:block;width:78%;margin:18px auto 0;padding:13px;border-radius:99px;background:var(--btn);color:#fff;font-weight:800;font-size:12px;letter-spacing:.04em}
     #tab-analisa .an-go:disabled{opacity:.6}
     #tab-analisa .an-empty{text-align:center;color:var(--mut);font-size:12px;padding:40px 10px}
     #tab-analisa .meta{font-size:11px;color:var(--mut);text-align:center;margin-bottom:12px}
@@ -74,9 +88,10 @@
     #tab-analisa .btns button{flex:1;font-weight:800;font-size:12px;padding:13px;border-radius:99px;border:1px solid var(--line);color:#fff;background:transparent}
     #tab-analisa .btns .p{background:var(--btn);border-color:var(--btn)}
     #tab-analisa .disc{text-align:center;font-size:10px;color:var(--mut);margin-bottom:14px}
-    #tab-analisa .h{display:flex;justify-content:space-between;font-size:12px;padding:8px 0;border-bottom:1px dashed rgba(255,255,255,.18)}
+    #tab-analisa .h{display:flex;justify-content:space-between;gap:10px;font-size:12px;padding:8px 0;border-bottom:1px dashed rgba(255,255,255,.18)}
     #tab-analisa .h:last-child{border:0}
     #tab-analisa .h small{color:var(--mut)}
+    #tab-analisa .h .r{text-align:right}
   </style>
 </head>
 <body class="max-w-md mx-auto relative min-h-screen pb-24">
@@ -149,19 +164,31 @@
         <button id="an-btn-hasil" onclick="anSub('hasil')">Hasil</button>
       </div>
 
+      <div id="anActive"></div>
+
       <div id="an-input">
+        <div class="an-sess" id="anSess">
+          <button data-s="ASIA" onclick="anPickSess('ASIA')">Asia</button>
+          <button data-s="EROPA" onclick="anPickSess('EROPA')">Eropa</button>
+          <button data-s="US" onclick="anPickSess('US')">US</button>
+        </div>
+
         <div class="an-paste">
           <div class="an-chip"><i class="fa-regular fa-clipboard"></i> PASTE SNAPSHOT</div>
           <textarea id="anSnapshot" placeholder="Tempel snapshot disini......"></textarea>
         </div>
+
         <div class="an-gex">
           <label class="put">PUT WALL</label>
-          <input id="anPut" inputmode="decimal" placeholder="-----------">
+          <input id="anPut" inputmode="decimal" placeholder="-----------" oninput="anGexEdited()">
           <label class="call">CALL WALL</label>
-          <input id="anCall" inputmode="decimal" placeholder="-----------">
+          <input id="anCall" inputmode="decimal" placeholder="-----------" oninput="anGexEdited()">
           <label class="zero">ZERO Gamma</label>
-          <input id="anZero" inputmode="decimal" placeholder="-----------">
+          <input id="anZero" inputmode="decimal" placeholder="-----------" oninput="anGexEdited()">
+          <button id="anLastBtn" class="an-last hidden" onclick="anUseLastGex()">PAKAI GEX TERAKHIR</button>
         </div>
+        <div id="anGexNote" class="an-note"></div>
+
         <button id="btnAnalisa" class="an-go" onclick="analisaSekarang()">ANALISA SEKARANG</button>
       </div>
 
@@ -199,8 +226,9 @@
     <!-- TAB 5: SETTINGS -->
     <div id="tab-settings" class="tab-content hidden animate-fade-in">
       <h2 class="text-xl font-bold text-white mb-1">Pengaturan</h2>
-      <p class="text-xs text-gray-400 mb-4">Ubah kredensial admin.</p>
-      <div class="navy-card p-6 mb-6">
+      <p class="text-xs text-gray-400 mb-4">Kredensial, notifikasi, dan uji analisa.</p>
+
+      <div class="navy-card p-6 mb-4">
         <div class="flex items-center gap-4 mb-6 pb-6 border-b border-gray-700">
           <div class="w-16 h-16 rounded-full bg-[#112240] border border-[#FCD34D] flex items-center justify-center text-2xl text-[#FCD34D]"><i class="fa-solid fa-user-shield"></i></div>
           <div>
@@ -220,6 +248,25 @@
           <button type="submit" class="w-full py-3 rounded-xl bg-[#FCD34D] text-black font-bold text-sm">Simpan</button>
         </form>
       </div>
+
+      <div class="navy-card p-5 mb-4">
+        <h3 class="text-sm font-bold text-white mb-1"><i class="fa-solid fa-bell text-[#FCD34D] mr-2"></i>Notifikasi setup</h3>
+        <p class="text-[11px] text-gray-400 mb-3 leading-relaxed">Notifikasi muncul saat harga mendekati entry, menyentuh entry, kena TP atau SL. Di iPhone, buka insider dari Add to Home Screen dulu.</p>
+        <p id="pushStatus" class="text-xs text-[#FCD34D] mb-3">Memeriksa...</p>
+        <button onclick="pushEnable()" class="w-full py-2.5 rounded-xl bg-[#FCD34D] text-black font-bold text-xs mb-2">Aktifkan notifikasi</button>
+        <button onclick="adminCall('/api/admin/push_test')" class="w-full py-2.5 rounded-xl border border-gray-600 text-white font-bold text-xs">Kirim notifikasi uji</button>
+      </div>
+
+      <div class="navy-card p-5 mb-6">
+        <h3 class="text-sm font-bold text-white mb-1"><i class="fa-solid fa-flask text-[#FCD34D] mr-2"></i>Uji alur analisa</h3>
+        <p class="text-[11px] text-gray-400 mb-3 leading-relaxed">Menjalankan harga palsu pada setup aktif yang berstatus Menunggu, tanpa menunggu pasar. Hasilnya diberi tanda simulasi di riwayat.</p>
+        <div class="grid grid-cols-3 gap-2">
+          <button onclick="adminCall('/api/admin/simulate',{mode:'tp'})" class="py-2.5 rounded-xl border border-green-600/60 text-green-400 font-bold text-xs">Simulasi TP</button>
+          <button onclick="adminCall('/api/admin/simulate',{mode:'sl'})" class="py-2.5 rounded-xl border border-red-600/60 text-red-400 font-bold text-xs">Simulasi SL</button>
+          <button onclick="adminCall('/api/admin/simulate',{mode:'cancel'})" class="py-2.5 rounded-xl border border-yellow-600/60 text-yellow-400 font-bold text-xs">Simulasi Batal</button>
+        </div>
+      </div>
+
       <button onclick="logoutAdmin()" class="w-full py-3 rounded-xl border border-red-900/50 text-red-500 hover:bg-red-900/20 transition text-sm font-bold"><i class="fa-solid fa-right-from-bracket mr-2"></i> LOGOUT</button>
     </div>
 
@@ -236,6 +283,7 @@
 
   <script>
     const API_URL = "https://enviable-umbilical-erupt.ngrok-free.dev";
+    const VAPID_PUBLIC_KEY = "BKlAgflAEz9v8iEE5RD-SkdgQSRheuIJ0p1OT2l4syaEMYf0lYusHe3KCHqO5jXWjU2fTXNiUhKf380Qq4EeXHs";
     let globalUsers = [];
     function esc(v) { return String(v == null ? '' : v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
@@ -268,6 +316,8 @@
       document.getElementById('tab-' + tabId).classList.add('block');
       document.getElementById('nav-' + tabId).classList.add('active');
       if (tabId === 'users' && globalUsers.length === 0) { loadUsersFromDB(); }
+      if (tabId === 'analisa') { anPollActive(); }
+      if (tabId === 'settings') { pushRefreshStatus(); }
     }
 
     async function loadUsersFromDB() {
@@ -393,12 +443,59 @@
       }
     }
 
+    async function adminCall(path, body) {
+      const r = await api(path, 'POST', body || {});
+      alert(r.message || (r.status === 'success' ? 'Berhasil.' : 'Gagal.'));
+      if (path.indexOf('simulate') !== -1) { setTimeout(anPollActive, 1500); }
+    }
+
+    // ==========================================
+    // NOTIFIKASI PUSH (khusus insider)
+    // ==========================================
+    function b64ToU8(s) {
+      const pad = '='.repeat((4 - s.length % 4) % 4);
+      const raw = atob((s + pad).replace(/-/g, '+').replace(/_/g, '/'));
+      const out = new Uint8Array(raw.length);
+      for (let i = 0; i < raw.length; i++) out[i] = raw.charCodeAt(i);
+      return out;
+    }
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(e => console.log('SW gagal', e)); });
+    }
+
+    async function pushRefreshStatus() {
+      const el = document.getElementById('pushStatus');
+      if (!('serviceWorker' in navigator) || typeof Notification === 'undefined') {
+        el.textContent = 'Browser ini belum mendukung notifikasi. Di iPhone, buka dari Add to Home Screen.'; return;
+      }
+      let sub = null;
+      try { const reg = await navigator.serviceWorker.getRegistration(); if (reg) sub = await reg.pushManager.getSubscription(); } catch (e) {}
+      if (Notification.permission === 'denied') el.textContent = 'Diblokir. Izinkan notifikasi lewat pengaturan browser atau iPhone.';
+      else el.textContent = (sub && Notification.permission === 'granted') ? 'Aktif di perangkat ini.' : 'Belum aktif.';
+    }
+
+    async function pushEnable() {
+      if (!('serviceWorker' in navigator) || typeof Notification === 'undefined') { alert('Browser ini belum mendukung notifikasi. Di iPhone, buka dari Add to Home Screen.'); return; }
+      const perm = await Notification.requestPermission();
+      if (perm !== 'granted') { alert('Izin notifikasi tidak diberikan.'); pushRefreshStatus(); return; }
+      try {
+        const reg = await navigator.serviceWorker.ready;
+        const opts = { userVisibleOnly: true, applicationServerKey: b64ToU8(VAPID_PUBLIC_KEY) };
+        let sub;
+        try { sub = await reg.pushManager.subscribe(opts); }
+        catch (e) { const old = await reg.pushManager.getSubscription(); if (old) await old.unsubscribe(); sub = await reg.pushManager.subscribe(opts); }
+        const r = await api('/api/admin/subscribe_push', 'POST', sub.toJSON());
+        alert(r.status === 'success' ? 'Notifikasi aktif di perangkat ini.' : 'Gagal: ' + (r.message || 'tidak diketahui'));
+      } catch (e) { alert('Gagal mengaktifkan notifikasi: ' + e.message); }
+      pushRefreshStatus();
+    }
+
     // ==========================================
     // ANALISA
     // ==========================================
-    const AN_MOCK = true;   // ganti false kalau endpoint /api/admin/analyze di server sudah siap
-    let anMockIdx = 0;
-    let anLast = null;
+    const AN_MOCK = false;   // true = tampilan saja tanpa server. false = pakai server VPS (analisa.js)
+    let anMockIdx = 0, anLast = null, anSession = '', anGexSaved = false;
 
     const anNum = v => { const n = parseFloat(String(v == null ? '' : v).replace(',', '.')); return isFinite(n) ? n : null; };
     const anF = n => Number(n).toFixed(2);
@@ -413,6 +510,38 @@
       if (which === 'hasil') anShowSaved();
     }
 
+    // ---- sesi (otomatis dari jam WIB, bisa diubah) ----
+    function anAutoSession() {
+      const h = (new Date().getUTCHours() + 7) % 24 + new Date().getUTCMinutes() / 60;
+      if (h >= 6 && h < 14) return 'ASIA';
+      if (h >= 14 && h < 19.5) return 'EROPA';
+      return 'US';
+    }
+    function anPickSess(s) {
+      anSession = s;
+      document.querySelectorAll('#anSess button').forEach(b => b.classList.toggle('on', b.dataset.s === s));
+    }
+
+    // ---- GEX terakhir ----
+    function anGexAgeMin() { try { const g = JSON.parse(localStorage.getItem('an_gex') || 'null'); return g ? Math.round((Date.now() - g.t) / 60000) : null; } catch (e) { return null; } }
+    function anGexRefreshBtn() {
+      const age = anGexAgeMin(), btn = document.getElementById('anLastBtn');
+      if (age === null) { btn.classList.add('hidden'); return; }
+      btn.classList.remove('hidden');
+      btn.textContent = 'PAKAI GEX TERAKHIR (' + (age < 60 ? age + ' menit' : (age / 60).toFixed(1) + ' jam') + ' lalu)';
+    }
+    function anUseLastGex() {
+      let g; try { g = JSON.parse(localStorage.getItem('an_gex')); } catch (e) {}
+      if (!g) return;
+      document.getElementById('anPut').value = g.put == null ? '' : g.put;
+      document.getElementById('anCall').value = g.call == null ? '' : g.call;
+      document.getElementById('anZero').value = g.zero == null ? '' : g.zero;
+      anGexSaved = true;
+      document.getElementById('anGexNote').textContent = 'Memakai level GEX lama. Dipakai sebagai konteks, bukan konfirmasi.';
+    }
+    function anGexEdited() { anGexSaved = false; document.getElementById('anGexNote').textContent = ''; }
+
+    // ---- riwayat lokal (hanya mode mock) ----
     function anHis() { try { return JSON.parse(localStorage.getItem('an_his') || '[]'); } catch (e) { return []; } }
     function anPushHis(text) {
       const stamp = new Date().toLocaleString('id-ID', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', hour12: false });
@@ -427,36 +556,59 @@
       document.getElementById('anView').innerHTML = '<div class="an-empty">Belum ada hasil. Tempel snapshot di tab Analisa lalu tekan Analisa Sekarang.</div>';
     }
 
-    // Hasil contoh, dibangun dari harga di snapshot supaya angkanya masuk akal
+    // ---- setup aktif ----
+    const AN_STATUS = { WAITING: 'MENUNGGU', NEAR: 'MENDEKAT', ENTRY: 'ENTRY TERSENTUH' };
+    async function anPollActive() {
+      if (AN_MOCK || document.hidden) return;
+      if (document.getElementById('tab-analisa').classList.contains('hidden')) return;
+      const r = await api('/api/admin/active', 'GET');
+      if (r.status === 'success') anRenderActive(r.active);
+    }
+    function anRenderActive(a) {
+      const el = document.getElementById('anActive');
+      if (!a) { el.innerHTML = ''; return; }
+      const sell = a.side === 'SELL';
+      const st = (AN_STATUS[a.status] || a.status) + (a.status === 'ENTRY' && a.tpHit ? ' | TP' + a.tpHit + ' tercapai' : '');
+      el.innerHTML = `<div class="act">
+        <div class="top"><span class="side" style="color:${sell ? '#f87171' : '#4ade80'}">${esc(a.side)} LIMIT ${anF(a.entry)}${a.sim ? ' (simulasi)' : ''}</span><span class="chip">${esc(st)}</span></div>
+        <div class="row">SL <b>${anF(a.sl)}</b> | TP1 <b>${anF(a.tps[0])}</b>${a.tps[1] ? ' | TP2 <b>' + anF(a.tps[1]) + '</b>' : ''}</div>
+        <div class="row">Harga ${a.lastPrice != null ? '<b>' + anF(a.lastPrice) + '</b>' : '-'}${a.distance != null && a.status !== 'ENTRY' ? ' | jarak ke entry <b>' + anF(a.distance) + '</b>' : ''} | sisa waktu <b>${a.expiresInMin}</b> menit</div>
+        ${a.status === 'ENTRY' && a.mae != null ? `<div class="row">Seretan terjauh <b>${anF(a.mae)}</b> | gerak searah terjauh <b>${anF(a.mfe)}</b></div>` : ''}
+        <button onclick="anCancel()">BATALKAN SETUP</button></div>`;
+    }
+    async function anCancel() {
+      if (!confirm('Batalkan setup aktif?')) return;
+      const r = await api('/api/admin/cancel_setup', 'POST', {});
+      alert(r.message || 'Selesai.');
+      anPollActive();
+    }
+    setInterval(anPollActive, 5000);
+
+    // ---- mock tampilan (hanya kalau AN_MOCK = true) ----
     function anMock(p, gex, snapTime, symbol) {
       const kind = ['SELL', 'BUY', 'WAIT'][anMockIdx++ % 3];
       const has = gex.put !== null || gex.call !== null || gex.zero !== null;
-      const C = { call: '#4ade80', put: '#f87171', tp: '#facc15', sl: '#f87171', ent: '#4ade80', info: '#94a3b8' };
+      const C = { call: '#4ade80', put: '#f87171', tp: '#facc15', sl: '#f87171', ent: '#4ade80' };
       const L = [['HARGA SEKARANG', '#fff', p, 1]];
       if (gex.call !== null) L.push(['CALL WALL', C.call, gex.call]);
       if (gex.put !== null) L.push(['PUT WALL', C.put, gex.put]);
       if (gex.zero !== null) L.push(['ZERO GAMMA', C.tp, gex.zero]);
-      let d = { meta: `${symbol} | ${snapTime} | Harga ${anF(p)} | DATA CONTOH`, banner: has ? null : ['MODE TANPA GEX', 'Kolom Put Wall, Call Wall, dan Zero Gamma kosong. Level diambil dari struktur dan order flow snapshot saja. Tingkat keyakinan dibatasi maksimal 60.'] };
+      let d = { meta: `${symbol} | ${snapTime} | Harga ${anF(p)} | DATA CONTOH`, banner: has ? null : ['MODE TANPA GEX', 'Kolom Put Wall, Call Wall, dan Zero Gamma kosong. Tingkat keyakinan dibatasi maksimal 60.'] };
       if (kind === 'WAIT') {
         Object.assign(d, { badge: ['b-wait', 'TIDAK ADA SETUP'], e: '-', sl: '-', tp: '-', x: null, rr: null,
           dec: [['INSTANT BUY', 0], ['INSTANT SELL', 0], ['WAIT: tidak ada setup', 1]],
-          cf: ['Struktur M1 dan M5 searah dulu', 'Harga menyentuh wall terdekat lalu bertahan'],
-          inv: 'Belum ada setup, jadi belum ada level batal.',
-          why: ['Struktur multi timeframe saling bertentangan', 'Order flow campur, wall banyak dibatalkan cepat'], conf: has ? 35 : 30 });
+          cf: ['Struktur M1 dan M5 searah dulu'], inv: 'Belum ada setup.', why: ['Data contoh'], conf: 30 });
       } else {
         const sell = kind === 'SELL';
         const entry = sell ? (gex.call !== null ? gex.call : p + 4.5) : (gex.put !== null ? gex.put : p - 4.5);
         const sl = sell ? entry + 2.4 : entry - 2.4;
         const t1 = gex.zero !== null ? gex.zero : (sell ? entry - 8 : entry + 8);
-        const t2 = sell ? t1 - 4 : t1 + 4, t3 = sell ? t1 - 10 : t1 + 10;
-        L.push(['ENTRY', C.ent, entry], ['SL', C.sl, sl], ['TP1', C.tp, t1], ['TP2', C.tp, t2], ['TP3', C.tp, t3]);
+        L.push(['ENTRY', C.ent, entry], ['SL', C.sl, sl], ['TP1', C.tp, t1]);
         const risk = Math.abs(entry - sl), rew = Math.abs(t1 - entry);
-        Object.assign(d, { badge: [sell ? 'b-sell' : 'b-buy', sell ? 'SELL LIMIT (contoh)' : 'BUY LIMIT (contoh)'],
-          e: anF(entry), sl: anF(sl), tp: anF(t1), x: `TP2 ${anF(t2)} | TP3 ${anF(t3)}`, rr: [anF(risk), anF(rew), '1 : ' + (rew / risk).toFixed(1)],
-          dec: [['INSTANT BUY', 0], ['INSTANT SELL', 0], ['WAIT: pasang ' + (sell ? 'sell' : 'buy') + ' limit', 1]],
-          cf: [sell ? 'Delta 30 detik kembali negatif di area entry' : 'Delta 30 detik berbalik positif di area entry', 'Wall dekat entry tidak dibatalkan'],
-          inv: sell ? `Batal jika M5 close di atas ${anF(sl)}.` : `Batal jika M5 close di bawah ${anF(sl)}.`,
-          why: ['Ini data contoh untuk cek tampilan', 'Level dihitung dari harga di snapshot', 'Analisa asli menyusul setelah API aktif'], conf: has ? 65 : 55 });
+        Object.assign(d, { badge: [sell ? 'b-sell' : 'b-buy', (sell ? 'SELL' : 'BUY') + ' LIMIT (contoh)'], e: anF(entry), sl: anF(sl), tp: anF(t1), x: null,
+          rr: [anF(risk), anF(rew), '1 : ' + (rew / risk).toFixed(1)],
+          dec: [['INSTANT BUY', 0], ['INSTANT SELL', 0], ['WAIT: pasang limit', 1]], cf: ['Delta searah di area entry'],
+          inv: `Batal jika M5 close melewati ${anF(sl)}.`, why: ['Data contoh untuk cek tampilan'], conf: has ? 65 : 55 });
       }
       d.lv = L.sort((a, b) => b[2] - a[2]).map(x => [x[0], x[1], anF(x[2]), anS(x[2] - p), x[3] ? 1 : 0]);
       d.his = anPushHis(kind === 'WAIT' ? 'Tidak ada setup (contoh)' : `${kind} ${d.e} (contoh)`);
@@ -469,6 +621,8 @@
       if (!snap) { alert('Tempel snapshot dulu.'); return; }
       if (!bid || !ask) { alert('Snapshot tidak dikenali: baris Bid dan Ask tidak ditemukan.'); return; }
       const gex = { put: anNum(document.getElementById('anPut').value), call: anNum(document.getElementById('anCall').value), zero: anNum(document.getElementById('anZero').value) };
+      const hasGex = gex.put !== null || gex.call !== null || gex.zero !== null;
+      const gexAge = (hasGex && anGexSaved) ? (anGexAgeMin() || 0) : 0;
       const price = (parseFloat(bid[1]) + parseFloat(ask[1])) / 2;
       const symbol = (/Symbol:\s*(\S+)/.exec(snap) || [, 'XAUUSD'])[1];
       const snapTime = (/Time:\s*([\d.]+ [\d:]+)/.exec(snap) || [, ''])[1];
@@ -482,24 +636,27 @@
           await new Promise(r => setTimeout(r, 900));
           d = anMock(price, gex, snapTime, symbol);
         } else {
-          const r = await api('/api/admin/analyze', 'POST', { snapshot: snap, putWall: gex.put, callWall: gex.call, zeroGamma: gex.zero });
+          const r = await api('/api/admin/analyze', 'POST', { snapshot: snap, putWall: gex.put, callWall: gex.call, zeroGamma: gex.zero, session: anSession, gexAgeMin: gexAge });
           if (r.status !== 'success') throw new Error(r.message || 'Analisa gagal.');
           d = r.data;
         }
+        if (hasGex && !anGexSaved) { try { localStorage.setItem('an_gex', JSON.stringify({ put: gex.put, call: gex.call, zero: gex.zero, t: Date.now() })); } catch (e) {} anGexRefreshBtn(); }
         anLast = d;
         try { localStorage.setItem('an_last', JSON.stringify(d)); } catch (e) {}
         renderHasil(d);
         anSub('hasil');
+        anPollActive();
       } catch (e) { alert(e.message); }
       finally { btn.disabled = false; btn.innerText = label; }
     }
 
     function renderHasil(d) {
       const list = a => (a || []).map(x => `<li>${esc(x)}</li>`).join('');
+      const hisRows = (d.his || anHis().slice(0, 5)).map(h => `<div class="h"><span>${esc(h[1])}<br><small>${esc(h[0])}</small></span><span class="r">${esc(h[2])}</span></div>`).join('') || '<div class="note">Belum ada riwayat.</div>';
       document.getElementById('anView').innerHTML = `
         <div class="meta">${esc(d.meta)}</div>
         ${d.banner ? `<div class="warn"><b>${esc(d.banner[0])}</b>${esc(d.banner[1])}</div>` : ''}
-        <div class="card"><h3>SETUP AKTIF</h3>
+        <div class="card"><h3>SETUP</h3>
           <div class="badge ${['b-sell', 'b-buy', 'b-wait'].includes(d.badge[0]) ? d.badge[0] : 'b-wait'}">${esc(d.badge[1])}</div>
           <div class="trio"><div><small>ENTRY</small><b>${esc(d.e)}</b></div><div><small>STOP LOSS</small><b>${esc(d.sl)}</b></div><div><small>TAKE PROFIT</small><b>${esc(d.tp)}</b></div></div>
           ${d.rr ? `<div class="rr">Risk <b>${esc(d.rr[0])}</b> poin | Reward <b>${esc(d.rr[1])}</b> poin | RR <b>${esc(d.rr[2])}</b></div>` : ''}
@@ -516,7 +673,16 @@
           <div class="note">Bukan probabilitas statistik.</div></div>
         <div class="btns"><button class="p" onclick="anSub('input')">ANALISA ULANG</button><button onclick="anCopy()">SALIN HASIL</button></div>
         <div class="disc">Analisa berbasis data, bukan nasihat finansial.</div>
-        <div class="card"><h3>RIWAYAT</h3>${(d.his || anHis().slice(0, 5)).map(h => `<div class="h"><span>${esc(h[1])}<br><small>${esc(h[0])}</small></span><span>${esc(h[2])}</span></div>`).join('') || '<div class="note">Belum ada riwayat.</div>'}</div>`;
+        <div class="card"><h3>RIWAYAT</h3><div id="anHis">${hisRows}</div></div>`;
+      anLoadHis();
+    }
+
+    async function anLoadHis() {
+      if (AN_MOCK) return;
+      const r = await api('/api/admin/analysis_log', 'GET');
+      const el = document.getElementById('anHis');
+      if (r.status !== 'success' || !el) return;
+      el.innerHTML = r.data.slice(0, 8).map(x => `<div class="h"><span>${esc(x.text)}<br><small>${esc(x.stamp)} | ${esc(x.session)}${x.mae != null ? ' | seretan ' + anF(x.mae) + ' | searah ' + anF(x.mfe) : ''}</small></span><span class="r">${esc(x.label)}</span></div>`).join('') || '<div class="note">Belum ada riwayat.</div>';
     }
 
     function anCopy() {
@@ -525,6 +691,11 @@
       const t = [d.badge[1], `Entry ${d.e} | SL ${d.sl} | TP ${d.tp}`, d.x || '', d.rr ? `RR ${d.rr[2]}` : '', `Batal: ${d.inv}`, `Keyakinan ${d.conf}/100`].filter(Boolean).join('\n');
       (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(() => alert('Hasil disalin.')).catch(() => alert(t));
     }
+
+    // ---- inisialisasi analisa ----
+    anPickSess(anAutoSession());
+    anGexRefreshBtn();
+    pushRefreshStatus();
   </script>
 </body>
 </html>
