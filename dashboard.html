@@ -7,39 +7,84 @@
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#020c1b">
   <link rel="apple-touch-icon" href="icon.png">
-  
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <script src="https://cdn.tailwindcss.com"></script>
-  
   <style>
-    body { font-family: 'Inter', sans-serif; background-color: #020c1b; background-image: url('bg.png'); background-size: cover; background-position: center; background-attachment: fixed; color: #ffffff; overflow-x: hidden; }
-    
-    /* Card Navy Style */
-    .navy-card { background: rgba(10, 18, 38, 0.85); backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6); border-radius: 16px; }
-    .navy-input { background: rgba(15, 25, 50, 0.9); border: 1px solid rgba(255, 255, 255, 0.15); color: white; transition: all 0.3s; }
-    .navy-input:focus { border-color: #FCD34D; outline: none; box-shadow: 0 0 10px rgba(252, 211, 77, 0.3); }
+    body{font-family:'Inter',sans-serif;background-color:#020c1b;background-image:url('bg.png');background-size:cover;background-position:center;background-attachment:fixed;color:#fff;overflow-x:hidden}
+    .navy-card{background:rgba(10,18,38,.85);backdrop-filter:blur(15px);border:1px solid rgba(255,255,255,.1);box-shadow:0 8px 32px rgba(0,0,0,.6);border-radius:16px}
+    .navy-input{background:rgba(15,25,50,.9);border:1px solid rgba(255,255,255,.15);color:#fff;transition:all .3s}
+    .navy-input:focus{border-color:#FCD34D;outline:none;box-shadow:0 0 10px rgba(252,211,77,.3)}
+    .bottom-nav-item{transition:all .3s ease;color:#94a3b8}
+    .bottom-nav-item.active{color:#FCD34D;transform:translateY(-3px)}
+    .text-gradient-gold{background:linear-gradient(to right,#FCD34D,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    @keyframes fade-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+    .animate-fade-in{animation:fade-in .3s ease-out forwards}
+    ::-webkit-scrollbar{display:none}
 
-    /* Navigasi Mobile Bawah */
-    .bottom-nav-item { transition: all 0.3s ease; color: #94a3b8; }
-    .bottom-nav-item.active { color: #FCD34D; transform: translateY(-3px); }
-
-    .text-gradient-gold { background: linear-gradient(to right, #FCD34D, #f59e0b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    
-    @keyframes fade-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-    .animate-fade-in { animation: fade-in 0.3s ease-out forwards; }
-    
-    ::-webkit-scrollbar { display: none; }
+    /* ===== ANALISA (scoped) ===== */
+    #tab-analisa{--line:rgba(255,255,255,.55);--mut:#94a3b8;--gold:#fcd34d;--red:#f87171;--grn:#4ade80;--yel:#facc15;--btn:#074a73}
+    #tab-analisa .an-tabs{display:flex;gap:12px;margin-bottom:14px}
+    #tab-analisa .an-tabs button{flex:1;font-weight:700;font-size:13px;padding:9px;border:1px solid var(--line);border-radius:99px;color:#fff;background:transparent}
+    #tab-analisa .an-tabs button.on{background:#2a8fd4;border-color:#2a8fd4}
+    #tab-analisa .an-paste{position:relative;margin-top:22px}
+    #tab-analisa .an-chip{position:absolute;top:-16px;left:6px;display:flex;align-items:center;gap:8px;background:#020c1b;border:1px solid var(--line);border-radius:99px;padding:8px 16px;font-size:12px;font-weight:700;z-index:2}
+    #tab-analisa .an-chip i{color:#3b9be0}
+    #tab-analisa textarea{width:100%;height:230px;background:transparent;border:1px solid var(--line);border-radius:30px;padding:26px 16px 14px;color:#fff;font-size:13px;resize:none;outline:none}
+    #tab-analisa textarea:focus,#tab-analisa .an-gex input:focus{border-color:var(--gold)}
+    #tab-analisa .an-gex{margin-top:20px;border:1px dashed var(--line);border-radius:28px;padding:16px 14px}
+    #tab-analisa .an-gex label{display:block;font-size:10px;font-weight:600;margin:0 0 3px 6px}
+    #tab-analisa .an-gex .put{color:var(--red)}#tab-analisa .an-gex .call{color:var(--grn)}#tab-analisa .an-gex .zero{color:var(--yel)}
+    #tab-analisa .an-gex input{width:100%;background:transparent;border:1px solid var(--line);border-radius:99px;padding:6px 12px;color:#fff;font-size:13px;margin-bottom:10px;outline:none}
+    #tab-analisa .an-go{display:block;width:78%;margin:22px auto 0;padding:13px;border-radius:99px;background:var(--btn);color:#fff;font-weight:800;font-size:12px;letter-spacing:.04em}
+    #tab-analisa .an-go:disabled{opacity:.6}
+    #tab-analisa .an-empty{text-align:center;color:var(--mut);font-size:12px;padding:40px 10px}
+    #tab-analisa .meta{font-size:11px;color:var(--mut);text-align:center;margin-bottom:12px}
+    #tab-analisa .card{border:1px solid var(--line);border-radius:22px;padding:14px;margin-bottom:12px}
+    #tab-analisa .card h3{margin:0 0 10px;font-size:11px;letter-spacing:.14em;color:var(--gold);font-weight:700}
+    #tab-analisa .badge{text-align:center;font-weight:800;font-size:16px;padding:11px;border-radius:14px;margin-bottom:12px;border:1.5px solid}
+    #tab-analisa .b-sell{color:var(--red);border-color:var(--red);background:rgba(248,113,113,.1)}
+    #tab-analisa .b-buy{color:var(--grn);border-color:var(--grn);background:rgba(74,222,128,.1)}
+    #tab-analisa .b-wait{color:var(--yel);border-color:var(--yel);background:rgba(250,204,21,.1)}
+    #tab-analisa .warn{border:1.5px solid var(--yel);background:rgba(250,204,21,.08);border-radius:16px;padding:11px 13px;margin-bottom:12px;font-size:12px;line-height:1.5;color:var(--yel)}
+    #tab-analisa .warn b{display:block;margin-bottom:2px;letter-spacing:.06em}
+    #tab-analisa .trio{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+    #tab-analisa .trio div{border:1px solid var(--line);border-radius:14px;padding:9px 4px;text-align:center}
+    #tab-analisa .trio small{display:block;font-size:9px;color:var(--mut);letter-spacing:.08em;margin-bottom:3px}
+    #tab-analisa .trio b{font-size:15px}
+    #tab-analisa .rr{text-align:center;font-size:12px;color:var(--mut);margin-top:10px}
+    #tab-analisa .rr b{color:#fff}
+    #tab-analisa .lv{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px dashed rgba(255,255,255,.18);font-size:13px}
+    #tab-analisa .lv:last-child{border:0}
+    #tab-analisa .lv i{width:4px;height:26px;border-radius:4px;flex:none}
+    #tab-analisa .lv span{flex:1}
+    #tab-analisa .lv em{font-style:normal;color:var(--mut);font-size:11px;min-width:64px;text-align:right}
+    #tab-analisa .lv.now{background:rgba(255,255,255,.07);border-radius:10px;padding-left:8px}
+    #tab-analisa .dec{display:flex;justify-content:space-between;padding:7px 0;font-size:13px;border-bottom:1px dashed rgba(255,255,255,.18)}
+    #tab-analisa .dec:last-child{border:0}
+    #tab-analisa .ok{color:var(--grn);font-weight:700}#tab-analisa .no{color:var(--red);font-weight:700}
+    #tab-analisa ul{margin:0;padding-left:18px;font-size:13px;line-height:1.55;list-style:disc}
+    #tab-analisa .inv{font-size:13px;line-height:1.5}
+    #tab-analisa .meter{height:10px;border-radius:9px;background:rgba(255,255,255,.12);overflow:hidden;margin:6px 0 8px}
+    #tab-analisa .meter div{height:100%;background:linear-gradient(90deg,#d97706,var(--gold))}
+    #tab-analisa .conf{display:flex;justify-content:space-between;font-size:13px}
+    #tab-analisa .conf b{font-size:22px;color:var(--gold)}
+    #tab-analisa .note{font-size:10px;color:var(--mut)}
+    #tab-analisa .btns{display:flex;gap:10px;margin:14px 0 10px}
+    #tab-analisa .btns button{flex:1;font-weight:800;font-size:12px;padding:13px;border-radius:99px;border:1px solid var(--line);color:#fff;background:transparent}
+    #tab-analisa .btns .p{background:var(--btn);border-color:var(--btn)}
+    #tab-analisa .disc{text-align:center;font-size:10px;color:var(--mut);margin-bottom:14px}
+    #tab-analisa .h{display:flex;justify-content:space-between;font-size:12px;padding:8px 0;border-bottom:1px dashed rgba(255,255,255,.18)}
+    #tab-analisa .h:last-child{border:0}
+    #tab-analisa .h small{color:var(--mut)}
   </style>
 </head>
 <body class="max-w-md mx-auto relative min-h-screen pb-24">
 
-  <!-- MAIN CONTENT -->
   <div class="relative z-10 px-4 pt-6">
 
     <!-- TAB 1: HOME -->
     <div id="tab-home" class="tab-content block animate-fade-in">
-      
       <div class="flex items-center gap-3 mb-6">
         <img src="logo.png" alt="Logo" class="w-10 h-10 object-contain">
         <div>
@@ -47,48 +92,31 @@
           <p class="text-[9px] text-[#FCD34D] tracking-[0.3em] uppercase">Insider</p>
         </div>
       </div>
-
       <h2 class="text-xl font-bold text-white mb-4">Selamat Datang <span id="adminNameMobile">ADMIN</span></h2>
-
       <div class="flex items-center gap-2 mb-8">
         <div class="w-3 h-3 rounded-full bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.8)]"></div>
         <span class="text-lg font-bold text-white">Sistem Online</span>
       </div>
-
-      <!-- Kartu Statistik -->
       <div class="grid grid-cols-2 gap-3 mb-8">
         <div class="navy-card p-4">
-          <div class="flex items-center gap-2 mb-2">
-            <i class="fa-solid fa-users text-[#FCD34D]"></i>
-            <p class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">Total User</p>
-          </div>
+          <div class="flex items-center gap-2 mb-2"><i class="fa-solid fa-users text-[#FCD34D]"></i><p class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">Total User</p></div>
           <h3 class="text-2xl font-black text-white mb-1" id="statTotalUser">0</h3>
           <p class="text-[10px] text-green-400 font-medium"><i class="fa-solid fa-arrow-up mr-1"></i>+15 hari ini</p>
         </div>
         <div class="navy-card p-4">
-          <div class="flex items-center gap-2 mb-2">
-            <i class="fa-solid fa-crown text-[#FCD34D]"></i>
-            <p class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">Total VIP</p>
-          </div>
+          <div class="flex items-center gap-2 mb-2"><i class="fa-solid fa-crown text-[#FCD34D]"></i><p class="text-[10px] text-gray-400 uppercase font-bold tracking-wider">Total VIP</p></div>
           <h3 class="text-2xl font-black text-gradient-gold mb-1" id="statTotalVip">0</h3>
           <p class="text-[10px] text-green-400 font-medium"><i class="fa-solid fa-arrow-up mr-1"></i>+15 hari ini</p>
         </div>
       </div>
-
-      <!-- Aksi Cepat -->
       <div class="mb-8">
         <h3 class="text-sm font-bold text-white mb-3 uppercase tracking-widest">Aksi Cepat</h3>
         <div class="flex gap-2">
-          <button onclick="switchTab('users')" class="flex-1 navy-card py-3 rounded-xl text-xs font-bold text-white hover:bg-white/5 transition flex items-center justify-center gap-2">
-            <i class="fa-solid fa-search text-[#FCD34D]"></i> Cari User
-          </button>
-          <button onclick="switchTab('broadcast')" class="flex-1 navy-card py-3 rounded-xl text-xs font-bold text-white hover:bg-white/5 transition flex items-center justify-center gap-2">
-            <i class="fa-solid fa-bullhorn text-[#FCD34D]"></i> Buat Pengumuman
-          </button>
+          <button onclick="switchTab('users')" class="flex-1 navy-card py-3 rounded-xl text-xs font-bold text-white hover:bg-white/5 transition flex items-center justify-center gap-2"><i class="fa-solid fa-search text-[#FCD34D]"></i> Cari User</button>
+          <button onclick="switchTab('analisa')" class="flex-1 navy-card py-3 rounded-xl text-xs font-bold text-white hover:bg-white/5 transition flex items-center justify-center gap-2"><i class="fa-solid fa-chart-line text-[#FCD34D]"></i> Analisa</button>
+          <button onclick="switchTab('broadcast')" class="flex-1 navy-card py-3 rounded-xl text-xs font-bold text-white hover:bg-white/5 transition flex items-center justify-center gap-2"><i class="fa-solid fa-bullhorn text-[#FCD34D]"></i> Pengumuman</button>
         </div>
       </div>
-
-      <!-- Aktivitas Terbaru -->
       <div class="mb-8">
         <h3 class="text-sm font-bold text-white mb-3 uppercase tracking-widest">Aktivitas Terbaru</h3>
         <div class="navy-card p-5">
@@ -105,25 +133,47 @@
     <div id="tab-users" class="tab-content hidden animate-fade-in">
       <h2 class="text-xl font-bold text-white mb-1">Database User</h2>
       <p class="text-xs text-gray-400 mb-4">Daftar member terhubung ke Google Sheets.</p>
-
       <div class="relative w-full mb-5">
         <i class="fa-solid fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-sm"></i>
         <input type="text" id="searchUser" onkeyup="filterUsers()" placeholder="Cari username..." class="navy-input w-full py-3 pl-11 pr-4 rounded-xl text-sm">
       </div>
-
       <div class="flex flex-col gap-3" id="userListContainer">
-        <div class="text-center py-10 text-gray-500">
-            <i class="fa-solid fa-spinner fa-spin text-2xl mb-3 text-[#FCD34D]"></i>
-            <p>Memuat data user...</p>
-        </div>
+        <div class="text-center py-10 text-gray-500"><i class="fa-solid fa-spinner fa-spin text-2xl mb-3 text-[#FCD34D]"></i><p>Memuat data user...</p></div>
       </div>
     </div>
 
-    <!-- TAB 3: BROADCAST -->
+    <!-- TAB 3: ANALISA -->
+    <div id="tab-analisa" class="tab-content hidden animate-fade-in">
+      <div class="an-tabs">
+        <button id="an-btn-input" class="on" onclick="anSub('input')">Analisa</button>
+        <button id="an-btn-hasil" onclick="anSub('hasil')">Hasil</button>
+      </div>
+
+      <div id="an-input">
+        <div class="an-paste">
+          <div class="an-chip"><i class="fa-regular fa-clipboard"></i> PASTE SNAPSHOT</div>
+          <textarea id="anSnapshot" placeholder="Tempel snapshot disini......"></textarea>
+        </div>
+        <div class="an-gex">
+          <label class="put">PUT WALL</label>
+          <input id="anPut" inputmode="decimal" placeholder="-----------">
+          <label class="call">CALL WALL</label>
+          <input id="anCall" inputmode="decimal" placeholder="-----------">
+          <label class="zero">ZERO Gamma</label>
+          <input id="anZero" inputmode="decimal" placeholder="-----------">
+        </div>
+        <button id="btnAnalisa" class="an-go" onclick="analisaSekarang()">ANALISA SEKARANG</button>
+      </div>
+
+      <div id="an-hasil" class="hidden">
+        <div id="anView"></div>
+      </div>
+    </div>
+
+    <!-- TAB 4: BROADCAST -->
     <div id="tab-broadcast" class="tab-content hidden animate-fade-in">
       <h2 class="text-xl font-bold text-white mb-1">Kirim Pengumuman</h2>
       <p class="text-xs text-gray-400 mb-4">Pesan muncul di lonceng Web AURION.</p>
-
       <div class="navy-card p-5">
         <form id="broadcastForm" onsubmit="sendBroadcast(event)">
           <div class="mb-4">
@@ -141,29 +191,23 @@
             <label class="block text-[10px] font-bold text-gray-400 mb-2 uppercase tracking-wider">Isi Pesan</label>
             <textarea id="bcMessage" rows="5" class="navy-input w-full p-3 rounded-xl text-sm" placeholder="Tulis pesan..." required></textarea>
           </div>
-          <button type="submit" id="btnSend" class="w-full py-3 rounded-xl bg-[#FCD34D] text-black font-bold text-sm shadow-[0_0_15px_rgba(252,211,77,0.3)] transition">
-            <i class="fa-solid fa-paper-plane mr-2"></i> Kirim
-          </button>
+          <button type="submit" id="btnSend" class="w-full py-3 rounded-xl bg-[#FCD34D] text-black font-bold text-sm shadow-[0_0_15px_rgba(252,211,77,0.3)] transition"><i class="fa-solid fa-paper-plane mr-2"></i> Kirim</button>
         </form>
       </div>
     </div>
 
-    <!-- TAB 4: SETTINGS -->
+    <!-- TAB 5: SETTINGS -->
     <div id="tab-settings" class="tab-content hidden animate-fade-in">
       <h2 class="text-xl font-bold text-white mb-1">Pengaturan</h2>
       <p class="text-xs text-gray-400 mb-4">Ubah kredensial admin.</p>
-
       <div class="navy-card p-6 mb-6">
         <div class="flex items-center gap-4 mb-6 pb-6 border-b border-gray-700">
-          <div class="w-16 h-16 rounded-full bg-[#112240] border border-[#FCD34D] flex items-center justify-center text-2xl text-[#FCD34D]">
-            <i class="fa-solid fa-user-shield"></i>
-          </div>
+          <div class="w-16 h-16 rounded-full bg-[#112240] border border-[#FCD34D] flex items-center justify-center text-2xl text-[#FCD34D]"><i class="fa-solid fa-user-shield"></i></div>
           <div>
             <h3 class="text-lg font-bold text-white">Super Admin</h3>
             <p class="text-xs text-[#FCD34D]" id="settingsUsernameDisplay">admin</p>
           </div>
         </div>
-
         <form onsubmit="event.preventDefault(); alert('Segera hadir');">
           <div class="mb-4">
             <label class="block text-[10px] font-bold text-gray-400 mb-2">Password Lama</label>
@@ -176,37 +220,23 @@
           <button type="submit" class="w-full py-3 rounded-xl bg-[#FCD34D] text-black font-bold text-sm">Simpan</button>
         </form>
       </div>
-      
-      <button onclick="logoutAdmin()" class="w-full py-3 rounded-xl border border-red-900/50 text-red-500 hover:bg-red-900/20 transition text-sm font-bold">
-        <i class="fa-solid fa-right-from-bracket mr-2"></i> LOGOUT
-      </button>
+      <button onclick="logoutAdmin()" class="w-full py-3 rounded-xl border border-red-900/50 text-red-500 hover:bg-red-900/20 transition text-sm font-bold"><i class="fa-solid fa-right-from-bracket mr-2"></i> LOGOUT</button>
     </div>
 
   </div>
 
   <!-- NAVBAR MOBILE BAWAH -->
   <nav class="fixed bottom-0 w-full max-w-md bg-[#0a1226]/95 backdrop-blur-md border-t border-gray-800 flex justify-around items-center py-3 pb-safe z-50">
-    <button onclick="switchTab('home')" id="nav-home" class="bottom-nav-item active flex flex-col items-center gap-1 w-16">
-      <i class="fa-solid fa-chart-pie text-lg"></i>
-      <span class="text-[9px] font-bold">Dashboard</span>
-    </button>
-    <button onclick="switchTab('users')" id="nav-users" class="bottom-nav-item flex flex-col items-center gap-1 w-16">
-      <i class="fa-solid fa-users text-lg"></i>
-      <span class="text-[9px] font-bold">Users</span>
-    </button>
-    <button onclick="switchTab('broadcast')" id="nav-broadcast" class="bottom-nav-item flex flex-col items-center gap-1 w-16">
-      <i class="fa-solid fa-bullhorn text-lg"></i>
-      <span class="text-[9px] font-bold">Broadcast</span>
-    </button>
-    <button onclick="switchTab('settings')" id="nav-settings" class="bottom-nav-item flex flex-col items-center gap-1 w-16">
-      <i class="fa-solid fa-gear text-lg"></i>
-      <span class="text-[9px] font-bold">Setelan</span>
-    </button>
+    <button onclick="switchTab('home')" id="nav-home" class="bottom-nav-item active flex flex-col items-center gap-1 w-14"><i class="fa-solid fa-chart-pie text-lg"></i><span class="text-[9px] font-bold">Dashboard</span></button>
+    <button onclick="switchTab('users')" id="nav-users" class="bottom-nav-item flex flex-col items-center gap-1 w-14"><i class="fa-solid fa-users text-lg"></i><span class="text-[9px] font-bold">Users</span></button>
+    <button onclick="switchTab('analisa')" id="nav-analisa" class="bottom-nav-item flex flex-col items-center gap-1 w-14"><i class="fa-solid fa-chart-line text-lg"></i><span class="text-[9px] font-bold">Analisa</span></button>
+    <button onclick="switchTab('broadcast')" id="nav-broadcast" class="bottom-nav-item flex flex-col items-center gap-1 w-14"><i class="fa-solid fa-bullhorn text-lg"></i><span class="text-[9px] font-bold">Broadcast</span></button>
+    <button onclick="switchTab('settings')" id="nav-settings" class="bottom-nav-item flex flex-col items-center gap-1 w-14"><i class="fa-solid fa-gear text-lg"></i><span class="text-[9px] font-bold">Setelan</span></button>
   </nav>
 
   <script>
     const API_URL = "https://enviable-umbilical-erupt.ngrok-free.dev";
-    let globalUsers = []; 
+    let globalUsers = [];
     function esc(v) { return String(v == null ? '' : v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
     async function api(path, method, body) {
@@ -225,7 +255,6 @@
       } catch (e) { return { status: 'error', message: 'Gagal terhubung ke server.' }; }
     }
 
-
     if (!localStorage.getItem('insider_token')) { window.location.href = "index.html"; }
 
     const adminUser = localStorage.getItem('insider_username') || "ADMIN";
@@ -235,120 +264,102 @@
     function switchTab(tabId) {
       document.querySelectorAll('.tab-content').forEach(el => { el.classList.add('hidden'); el.classList.remove('block'); });
       document.querySelectorAll('.bottom-nav-item').forEach(el => { el.classList.remove('active'); });
-      
       document.getElementById('tab-' + tabId).classList.remove('hidden');
       document.getElementById('tab-' + tabId).classList.add('block');
       document.getElementById('nav-' + tabId).classList.add('active');
-
       if (tabId === 'users' && globalUsers.length === 0) { loadUsersFromDB(); }
     }
 
     async function loadUsersFromDB() {
-        try {
-            const data = await api('/api/admin/users', 'GET');
-            
-            if(data.status === 'success') {
-                globalUsers = data.data;
-                renderUsers(globalUsers);
-                calculateStats(globalUsers);
-            } else {
-                document.getElementById('userListContainer').innerHTML = `<p class="text-red-500 text-center">Gagal: ${data.message}</p>`;
-            }
-        } catch(e) {
-            document.getElementById('userListContainer').innerHTML = `<p class="text-red-500 text-center">Gagal terhubung ke server.</p>`;
+      try {
+        const data = await api('/api/admin/users', 'GET');
+        if (data.status === 'success') {
+          globalUsers = data.data;
+          renderUsers(globalUsers);
+          calculateStats(globalUsers);
+        } else {
+          document.getElementById('userListContainer').innerHTML = `<p class="text-red-500 text-center">Gagal: ${esc(data.message)}</p>`;
         }
+      } catch (e) {
+        document.getElementById('userListContainer').innerHTML = `<p class="text-red-500 text-center">Gagal terhubung ke server.</p>`;
+      }
     }
 
     function renderUsers(users) {
-        const container = document.getElementById('userListContainer');
-        let html = '';
-        if(users.length === 0) { container.innerHTML = '<p class="text-center text-gray-500">Belum ada data user.</p>'; return; }
-
-        users.forEach((u) => {
-            let roleColor = "bg-gray-800 border-gray-600 text-gray-400";
-            if(u.role === 'ADMIN') roleColor = "bg-red-900/50 border-red-500/50 text-red-400";
-            else if(u.role === 'VIP' || u.role === 'VVIP') roleColor = "bg-amber-900/50 border-amber-500/50 text-[#FCD34D]";
-
-            let initial = u.username ? u.username.charAt(0).toUpperCase() : "U";
-
-            html += `
-            <div class="navy-card overflow-hidden user-item" data-username="${esc(u.username).toLowerCase()}">
-              <div class="p-4 flex justify-between items-center cursor-pointer hover:bg-white/5 transition" onclick="toggleUser(this)">
-                <div class="flex items-center gap-3">
-                  <div class="w-10 h-10 rounded-full bg-[#112240] border border-gray-700 flex items-center justify-center font-bold text-white">${esc(initial)}</div>
-                  <div>
-                    <p class="text-sm font-bold text-white">${esc(u.username)}</p>
-                    <p class="text-[10px] text-gray-400">${esc(u.email || '-')}</p>
-                  </div>
-                </div>
-                <div class="flex items-center gap-2">
-                  <span class="px-2 py-1 ${roleColor} text-[9px] font-bold rounded uppercase">${esc(u.role)}</span>
-                  <i class="fa-solid fa-chevron-down text-gray-500 text-xs transition-transform transform"></i>
-                </div>
-              </div>
-              <div class="hidden p-4 border-t border-gray-700 bg-[#020c1b]">
-                <div class="grid grid-cols-2 gap-3 mb-4">
-                  <div><p class="text-[9px] text-gray-500 uppercase">Masa Aktif</p><p class="text-xs text-white">${esc(u.validUntil || '-')}</p></div>
-                  <div><p class="text-[9px] text-gray-500 uppercase">Status</p><p class="text-xs ${u.status === 'ACTIVE' ? 'text-green-400' : 'text-red-400'}">${esc(u.status)}</p></div>
-                </div>
-                <div class="flex gap-2">
-                  <button class="flex-1 py-1.5 bg-gray-700 text-white text-[10px] font-bold rounded" data-email="${esc(u.email)}" onclick="changeRole(this.dataset.email)">UBAH ROLE</button>
-                  <button class="flex-1 py-1.5 bg-red-900/50 border border-red-500/50 text-red-400 text-[10px] font-bold rounded" data-email="${esc(u.email)}" data-status="${esc(u.status)}" onclick="toggleBan(this.dataset.email, this.dataset.status)">${u.status === 'BANNED' ? 'UNBAN' : 'BAN'}</button>
-                </div>
+      const container = document.getElementById('userListContainer');
+      let html = '';
+      if (users.length === 0) { container.innerHTML = '<p class="text-center text-gray-500">Belum ada data user.</p>'; return; }
+      users.forEach((u) => {
+        let roleColor = "bg-gray-800 border-gray-600 text-gray-400";
+        if (u.role === 'ADMIN') roleColor = "bg-red-900/50 border-red-500/50 text-red-400";
+        else if (u.role === 'VIP' || u.role === 'VVIP') roleColor = "bg-amber-900/50 border-amber-500/50 text-[#FCD34D]";
+        let initial = u.username ? u.username.charAt(0).toUpperCase() : "U";
+        html += `
+        <div class="navy-card overflow-hidden user-item" data-username="${esc(u.username).toLowerCase()}">
+          <div class="p-4 flex justify-between items-center cursor-pointer hover:bg-white/5 transition" onclick="toggleUser(this)">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-[#112240] border border-gray-700 flex items-center justify-center font-bold text-white">${esc(initial)}</div>
+              <div>
+                <p class="text-sm font-bold text-white">${esc(u.username)}</p>
+                <p class="text-[10px] text-gray-400">${esc(u.email || '-')}</p>
               </div>
             </div>
-            `;
-        });
-        container.innerHTML = html;
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-1 ${roleColor} text-[9px] font-bold rounded uppercase">${esc(u.role)}</span>
+              <i class="fa-solid fa-chevron-down text-gray-500 text-xs transition-transform transform"></i>
+            </div>
+          </div>
+          <div class="hidden p-4 border-t border-gray-700 bg-[#020c1b]">
+            <div class="grid grid-cols-2 gap-3 mb-4">
+              <div><p class="text-[9px] text-gray-500 uppercase">Masa Aktif</p><p class="text-xs text-white">${esc(u.validUntil || '-')}</p></div>
+              <div><p class="text-[9px] text-gray-500 uppercase">Status</p><p class="text-xs ${u.status === 'ACTIVE' ? 'text-green-400' : 'text-red-400'}">${esc(u.status)}</p></div>
+            </div>
+            <div class="flex gap-2">
+              <button class="flex-1 py-1.5 bg-gray-700 text-white text-[10px] font-bold rounded" data-email="${esc(u.email)}" onclick="changeRole(this.dataset.email)">UBAH ROLE</button>
+              <button class="flex-1 py-1.5 bg-red-900/50 border border-red-500/50 text-red-400 text-[10px] font-bold rounded" data-email="${esc(u.email)}" data-status="${esc(u.status)}" onclick="toggleBan(this.dataset.email, this.dataset.status)">${u.status === 'BANNED' ? 'UNBAN' : 'BAN'}</button>
+            </div>
+          </div>
+        </div>`;
+      });
+      container.innerHTML = html;
     }
 
     function calculateStats(users) {
-        let total = users.length;
-        let vip = users.filter(u => u.role === 'VIP' || u.role === 'VVIP').length;
-        document.getElementById('statTotalUser').innerText = total;
-        document.getElementById('statTotalVip').innerText = vip;
+      document.getElementById('statTotalUser').innerText = users.length;
+      document.getElementById('statTotalVip').innerText = users.filter(u => u.role === 'VIP' || u.role === 'VVIP').length;
     }
 
     function filterUsers() {
-        const search = document.getElementById('searchUser').value.toLowerCase();
-        const items = document.querySelectorAll('.user-item');
-        items.forEach(item => {
-            const username = item.getAttribute('data-username');
-            if(username.includes(search)) { item.style.display = 'block'; } else { item.style.display = 'none'; }
-        });
+      const search = document.getElementById('searchUser').value.toLowerCase();
+      document.querySelectorAll('.user-item').forEach(item => {
+        item.style.display = item.getAttribute('data-username').includes(search) ? 'block' : 'none';
+      });
     }
 
     function toggleUser(headerElement) {
       const detail = headerElement.nextElementSibling;
       const icon = headerElement.querySelector('.fa-chevron-down');
-      if (detail.classList.contains('hidden')) {
-        detail.classList.remove('hidden'); icon.style.transform = 'rotate(180deg)';
-      } else {
-        detail.classList.add('hidden'); icon.style.transform = 'rotate(0deg)';
-      }
+      if (detail.classList.contains('hidden')) { detail.classList.remove('hidden'); icon.style.transform = 'rotate(180deg)'; }
+      else { detail.classList.add('hidden'); icon.style.transform = 'rotate(0deg)'; }
     }
 
     async function sendBroadcast(e) {
       e.preventDefault();
       const btn = document.getElementById('btnSend');
       const originalText = btn.innerHTML;
-      
       const target = document.getElementById('bcTarget').value;
       const title = document.getElementById('bcTitle').value;
       const msg = document.getElementById('bcMessage').value;
-
       btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i> Mengirim...';
       btn.disabled = true;
-
       try {
         const data = await api('/api/admin/broadcast', 'POST', { target: target, title: title, message: msg });
-
-        if(data.status === 'success') {
-            alert(`✅ Pengumuman Berhasil Dikirim!`);
-            document.getElementById('broadcastForm').reset();
-            switchTab('home');
+        if (data.status === 'success') {
+          alert('✅ Pengumuman Berhasil Dikirim!');
+          document.getElementById('broadcastForm').reset();
+          switchTab('home');
         } else { alert("Gagal: " + data.message); }
-      } catch(error) { alert("Gagal terhubung ke server."); } 
+      } catch (error) { alert("Gagal terhubung ke server."); }
       finally { btn.innerHTML = originalText; btn.disabled = false; }
     }
 
@@ -375,11 +386,144 @@
     }
 
     function logoutAdmin() {
-      if(confirm("Yakin ingin keluar?")) {
+      if (confirm("Yakin ingin keluar?")) {
         localStorage.removeItem('insider_token');
         localStorage.removeItem('insider_username');
         window.location.href = "index.html";
       }
+    }
+
+    // ==========================================
+    // ANALISA
+    // ==========================================
+    const AN_MOCK = true;   // ganti false kalau endpoint /api/admin/analyze di server sudah siap
+    let anMockIdx = 0;
+    let anLast = null;
+
+    const anNum = v => { const n = parseFloat(String(v == null ? '' : v).replace(',', '.')); return isFinite(n) ? n : null; };
+    const anF = n => Number(n).toFixed(2);
+    const anS = n => (n > 0 ? '+' : '') + anF(n);
+    const anColor = c => /^#[0-9a-f]{3,8}$/i.test(c) ? c : '#94a3b8';
+
+    function anSub(which) {
+      document.getElementById('an-input').classList.toggle('hidden', which !== 'input');
+      document.getElementById('an-hasil').classList.toggle('hidden', which !== 'hasil');
+      document.getElementById('an-btn-input').classList.toggle('on', which === 'input');
+      document.getElementById('an-btn-hasil').classList.toggle('on', which === 'hasil');
+      if (which === 'hasil') anShowSaved();
+    }
+
+    function anHis() { try { return JSON.parse(localStorage.getItem('an_his') || '[]'); } catch (e) { return []; } }
+    function anPushHis(text) {
+      const stamp = new Date().toLocaleString('id-ID', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', hour12: false });
+      const h = anHis(); h.unshift([stamp, text, 'Menunggu']);
+      try { localStorage.setItem('an_his', JSON.stringify(h.slice(0, 20))); } catch (e) {}
+      return h.slice(0, 5);
+    }
+
+    function anShowSaved() {
+      if (anLast) { renderHasil(anLast); return; }
+      try { const s = localStorage.getItem('an_last'); if (s) { anLast = JSON.parse(s); renderHasil(anLast); return; } } catch (e) {}
+      document.getElementById('anView').innerHTML = '<div class="an-empty">Belum ada hasil. Tempel snapshot di tab Analisa lalu tekan Analisa Sekarang.</div>';
+    }
+
+    // Hasil contoh, dibangun dari harga di snapshot supaya angkanya masuk akal
+    function anMock(p, gex, snapTime, symbol) {
+      const kind = ['SELL', 'BUY', 'WAIT'][anMockIdx++ % 3];
+      const has = gex.put !== null || gex.call !== null || gex.zero !== null;
+      const C = { call: '#4ade80', put: '#f87171', tp: '#facc15', sl: '#f87171', ent: '#4ade80', info: '#94a3b8' };
+      const L = [['HARGA SEKARANG', '#fff', p, 1]];
+      if (gex.call !== null) L.push(['CALL WALL', C.call, gex.call]);
+      if (gex.put !== null) L.push(['PUT WALL', C.put, gex.put]);
+      if (gex.zero !== null) L.push(['ZERO GAMMA', C.tp, gex.zero]);
+      let d = { meta: `${symbol} | ${snapTime} | Harga ${anF(p)} | DATA CONTOH`, banner: has ? null : ['MODE TANPA GEX', 'Kolom Put Wall, Call Wall, dan Zero Gamma kosong. Level diambil dari struktur dan order flow snapshot saja. Tingkat keyakinan dibatasi maksimal 60.'] };
+      if (kind === 'WAIT') {
+        Object.assign(d, { badge: ['b-wait', 'TIDAK ADA SETUP'], e: '-', sl: '-', tp: '-', x: null, rr: null,
+          dec: [['INSTANT BUY', 0], ['INSTANT SELL', 0], ['WAIT: tidak ada setup', 1]],
+          cf: ['Struktur M1 dan M5 searah dulu', 'Harga menyentuh wall terdekat lalu bertahan'],
+          inv: 'Belum ada setup, jadi belum ada level batal.',
+          why: ['Struktur multi timeframe saling bertentangan', 'Order flow campur, wall banyak dibatalkan cepat'], conf: has ? 35 : 30 });
+      } else {
+        const sell = kind === 'SELL';
+        const entry = sell ? (gex.call !== null ? gex.call : p + 4.5) : (gex.put !== null ? gex.put : p - 4.5);
+        const sl = sell ? entry + 2.4 : entry - 2.4;
+        const t1 = gex.zero !== null ? gex.zero : (sell ? entry - 8 : entry + 8);
+        const t2 = sell ? t1 - 4 : t1 + 4, t3 = sell ? t1 - 10 : t1 + 10;
+        L.push(['ENTRY', C.ent, entry], ['SL', C.sl, sl], ['TP1', C.tp, t1], ['TP2', C.tp, t2], ['TP3', C.tp, t3]);
+        const risk = Math.abs(entry - sl), rew = Math.abs(t1 - entry);
+        Object.assign(d, { badge: [sell ? 'b-sell' : 'b-buy', sell ? 'SELL LIMIT (contoh)' : 'BUY LIMIT (contoh)'],
+          e: anF(entry), sl: anF(sl), tp: anF(t1), x: `TP2 ${anF(t2)} | TP3 ${anF(t3)}`, rr: [anF(risk), anF(rew), '1 : ' + (rew / risk).toFixed(1)],
+          dec: [['INSTANT BUY', 0], ['INSTANT SELL', 0], ['WAIT: pasang ' + (sell ? 'sell' : 'buy') + ' limit', 1]],
+          cf: [sell ? 'Delta 30 detik kembali negatif di area entry' : 'Delta 30 detik berbalik positif di area entry', 'Wall dekat entry tidak dibatalkan'],
+          inv: sell ? `Batal jika M5 close di atas ${anF(sl)}.` : `Batal jika M5 close di bawah ${anF(sl)}.`,
+          why: ['Ini data contoh untuk cek tampilan', 'Level dihitung dari harga di snapshot', 'Analisa asli menyusul setelah API aktif'], conf: has ? 65 : 55 });
+      }
+      d.lv = L.sort((a, b) => b[2] - a[2]).map(x => [x[0], x[1], anF(x[2]), anS(x[2] - p), x[3] ? 1 : 0]);
+      d.his = anPushHis(kind === 'WAIT' ? 'Tidak ada setup (contoh)' : `${kind} ${d.e} (contoh)`);
+      return d;
+    }
+
+    async function analisaSekarang() {
+      const snap = document.getElementById('anSnapshot').value.trim();
+      const bid = /Bid:\s*([\d.]+)/.exec(snap), ask = /Ask:\s*([\d.]+)/.exec(snap);
+      if (!snap) { alert('Tempel snapshot dulu.'); return; }
+      if (!bid || !ask) { alert('Snapshot tidak dikenali: baris Bid dan Ask tidak ditemukan.'); return; }
+      const gex = { put: anNum(document.getElementById('anPut').value), call: anNum(document.getElementById('anCall').value), zero: anNum(document.getElementById('anZero').value) };
+      const price = (parseFloat(bid[1]) + parseFloat(ask[1])) / 2;
+      const symbol = (/Symbol:\s*(\S+)/.exec(snap) || [, 'XAUUSD'])[1];
+      const snapTime = (/Time:\s*([\d.]+ [\d:]+)/.exec(snap) || [, ''])[1];
+
+      const btn = document.getElementById('btnAnalisa');
+      const label = btn.innerText;
+      btn.disabled = true; btn.innerText = 'MENGANALISA...';
+      try {
+        let d;
+        if (AN_MOCK) {
+          await new Promise(r => setTimeout(r, 900));
+          d = anMock(price, gex, snapTime, symbol);
+        } else {
+          const r = await api('/api/admin/analyze', 'POST', { snapshot: snap, putWall: gex.put, callWall: gex.call, zeroGamma: gex.zero });
+          if (r.status !== 'success') throw new Error(r.message || 'Analisa gagal.');
+          d = r.data;
+        }
+        anLast = d;
+        try { localStorage.setItem('an_last', JSON.stringify(d)); } catch (e) {}
+        renderHasil(d);
+        anSub('hasil');
+      } catch (e) { alert(e.message); }
+      finally { btn.disabled = false; btn.innerText = label; }
+    }
+
+    function renderHasil(d) {
+      const list = a => (a || []).map(x => `<li>${esc(x)}</li>`).join('');
+      document.getElementById('anView').innerHTML = `
+        <div class="meta">${esc(d.meta)}</div>
+        ${d.banner ? `<div class="warn"><b>${esc(d.banner[0])}</b>${esc(d.banner[1])}</div>` : ''}
+        <div class="card"><h3>SETUP AKTIF</h3>
+          <div class="badge ${['b-sell', 'b-buy', 'b-wait'].includes(d.badge[0]) ? d.badge[0] : 'b-wait'}">${esc(d.badge[1])}</div>
+          <div class="trio"><div><small>ENTRY</small><b>${esc(d.e)}</b></div><div><small>STOP LOSS</small><b>${esc(d.sl)}</b></div><div><small>TAKE PROFIT</small><b>${esc(d.tp)}</b></div></div>
+          ${d.rr ? `<div class="rr">Risk <b>${esc(d.rr[0])}</b> poin | Reward <b>${esc(d.rr[1])}</b> poin | RR <b>${esc(d.rr[2])}</b></div>` : ''}
+          ${d.x ? `<div class="rr">${esc(d.x)}</div>` : ''}
+        </div>
+        <div class="card"><h3>PETA LEVEL</h3>${(d.lv || []).map(l => `<div class="lv${l[4] ? ' now' : ''}"><i style="background:${anColor(l[1])}"></i><span>${esc(l[0])}</span><b>${esc(l[2])}</b><em>${esc(l[3])}</em></div>`).join('')}</div>
+        <div class="card"><h3>KEPUTUSAN</h3>${(d.dec || []).map(x => `<div class="dec"><span>${esc(x[0])}</span><span class="${x[1] ? 'ok' : 'no'}">${x[1] ? 'YA' : 'TIDAK'}</span></div>`).join('')}</div>
+        <div class="card"><h3>YANG DITUNGGU</h3><ul>${list(d.cf)}</ul></div>
+        <div class="card"><h3>INVALIDASI</h3><div class="inv">${esc(d.inv)}</div></div>
+        <div class="card"><h3>ALASAN</h3><ul>${list(d.why)}</ul></div>
+        <div class="card"><h3>TINGKAT KEYAKINAN ANALISIS</h3>
+          <div class="conf"><span>Skor</span><b>${Number(d.conf) || 0}/100</b></div>
+          <div class="meter"><div style="width:${Math.max(0, Math.min(100, Number(d.conf) || 0))}%"></div></div>
+          <div class="note">Bukan probabilitas statistik.</div></div>
+        <div class="btns"><button class="p" onclick="anSub('input')">ANALISA ULANG</button><button onclick="anCopy()">SALIN HASIL</button></div>
+        <div class="disc">Analisa berbasis data, bukan nasihat finansial.</div>
+        <div class="card"><h3>RIWAYAT</h3>${(d.his || anHis().slice(0, 5)).map(h => `<div class="h"><span>${esc(h[1])}<br><small>${esc(h[0])}</small></span><span>${esc(h[2])}</span></div>`).join('') || '<div class="note">Belum ada riwayat.</div>'}</div>`;
+    }
+
+    function anCopy() {
+      if (!anLast) return;
+      const d = anLast;
+      const t = [d.badge[1], `Entry ${d.e} | SL ${d.sl} | TP ${d.tp}`, d.x || '', d.rr ? `RR ${d.rr[2]}` : '', `Batal: ${d.inv}`, `Keyakinan ${d.conf}/100`].filter(Boolean).join('\n');
+      (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(() => alert('Hasil disalin.')).catch(() => alert(t));
     }
   </script>
 </body>
