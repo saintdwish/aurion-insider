@@ -1,0 +1,17 @@
+{
+  "name": "Aurion Insider",
+  "short_name": "Insider",
+  "start_url": "./dashboard.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#020c1b",
+  "theme_color": "#020c1b",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
