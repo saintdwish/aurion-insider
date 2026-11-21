@@ -254,7 +254,8 @@
         <p class="text-[11px] text-gray-400 mb-3 leading-relaxed">Notifikasi muncul saat harga mendekati entry, menyentuh entry, kena TP atau SL. Di iPhone, buka insider dari Add to Home Screen dulu.</p>
         <p id="pushStatus" class="text-xs text-[#FCD34D] mb-3">Memeriksa...</p>
         <button onclick="pushEnable()" class="w-full py-2.5 rounded-xl bg-[#FCD34D] text-black font-bold text-xs mb-2">Aktifkan notifikasi</button>
-        <button onclick="adminCall('/api/admin/push_test')" class="w-full py-2.5 rounded-xl border border-gray-600 text-white font-bold text-xs">Kirim notifikasi uji</button>
+        <button onclick="adminCall('/api/admin/push_test')" class="w-full py-2.5 rounded-xl border border-gray-600 text-white font-bold text-xs mb-2">Kirim notifikasi uji</button>
+        <button onclick="feedCheck()" class="w-full py-2.5 rounded-xl border border-gray-600 text-white font-bold text-xs">Cek feed harga dan QSC</button>
       </div>
 
       <div class="navy-card p-5 mb-6">
@@ -447,6 +448,11 @@
       const r = await api(path, 'POST', body || {});
       alert(r.message || (r.status === 'success' ? 'Berhasil.' : 'Gagal.'));
       if (path.indexOf('simulate') !== -1) { setTimeout(anPollActive, 1500); }
+    }
+
+    async function feedCheck() {
+      const r = await api('/api/admin/feed_status', 'GET');
+      alert(r.message || 'Tidak ada jawaban dari server.');
     }
 
     // ==========================================
@@ -663,6 +669,7 @@
           ${d.x ? `<div class="rr">${esc(d.x)}</div>` : ''}
         </div>
         <div class="card"><h3>PETA LEVEL</h3>${(d.lv || []).map(l => `<div class="lv${l[4] ? ' now' : ''}"><i style="background:${anColor(l[1])}"></i><span>${esc(l[0])}</span><b>${esc(l[2])}</b><em>${esc(l[3])}</em></div>`).join('')}</div>
+        ${d.qsc ? `<div class="card"><h3>KONTEKS WAKTU</h3>${d.qsc.stale ? `<div class="note">Data kuartal berumur ${esc(d.qsc.age)} menit (lama), tidak dipakai di analisa ini. Cek EA kuartal di MT5.</div>` : d.qsc.lines.map(x => `<div class="inv" style="font-size:12px">${esc(x)}</div>`).join('') + `<div class="note" style="margin-top:6px">Umur data ${esc(d.qsc.age)} menit. Hanya konteks, bukan sinyal.</div>`}</div>` : ''}
         <div class="card"><h3>KEPUTUSAN</h3>${(d.dec || []).map(x => `<div class="dec"><span>${esc(x[0])}</span><span class="${x[1] ? 'ok' : 'no'}">${x[1] ? 'YA' : 'TIDAK'}</span></div>`).join('')}</div>
         <div class="card"><h3>YANG DITUNGGU</h3><ul>${list(d.cf)}</ul></div>
         <div class="card"><h3>INVALIDASI</h3><div class="inv">${esc(d.inv)}</div></div>
